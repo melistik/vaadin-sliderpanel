@@ -1,0 +1,90 @@
+.v-sliderpanel-wrapper {
+	top: 0;
+	width: 100%;
+	z-index: 9990;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.v-sliderpanel-content {
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+	background: #808080;
+	color: #fff;
+	z-index: 9990;
+}
+
+.v-sliderpanel-navigator {
+	position: relative;
+	top: 0;
+	z-index: 9991;
+	min-width: 400px;
+}
+
+/* color-line for showing in collapsed status a full width line */
+.v-sliderpanel-line {
+	background: #808080;
+	height: 5px;
+	position: relative;
+	top: 0;
+}
+.v-sliderpanel-wrapper.mode-bottom .v-sliderpanel-line {
+	top: 40px;
+}
+
+/* wrapper for the hole tab element with caption and icon */
+.v-sliderpanel-tab {
+	position: relative;
+	line-height: 35px;
+	color: #fff;
+	font-size: 0.8em;
+	height: 40px;
+	width: 260px;
+	cursor: pointer;
+	background: #808080;
+	border-radius: 0 0 10px 10px;
+}
+.v-sliderpanel-tab.tab-beginning {
+	float: left;
+	clear: left;
+	left: 4%;
+}
+.v-sliderpanel-tab.tab-middle {
+	float: left;
+	clear: left;
+	left: 50%;
+	margin-left: -130px;
+}
+.v-sliderpanel-tab.tab-end {
+	float: right;
+	clear: right;
+	right: 4%;
+}
+
+.v-sliderpanel-wrapper.mode-bottom .v-sliderpanel-tab {
+	border-radius: 10px 10px 0 0;
+}
+
+.v-sliderpanel-caption {
+	padding: 3px 0 0 15px;
+	width: 210px;
+}
+
+.v-sliderpanel-icon {
+	height: 16px;
+	width: 16px;
+	position: absolute;
+	top: 13px;
+	right: 13px;
+	background-repeat: no-repeat;
+	background-size: 16px 16px;
+}
+
+.v-sliderpanel-tab.closed .v-sliderpanel-icon {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAclBMVEX///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8GMOiGAAAAJXRSTlMAAQIEER4gIiYoNDU2Nzk7Pj9AQVVWf4GDhJ+goafJysvX2Pj5IsXCZQAAAIRJREFUeNplz90WgiAQBOBBUdQosywzU0Td93/FYg4XZd8FP8tZGBCo030Y+7NCZCehyYLaVaK1DftqC+tlCeNWAcrxsCg4OYVGKMuEGjx+Cx0GEV8ak6bGlF7kyUKudZJonbPw13LZX6rm3bOwDOY9gx3wcfuOTsdZyFlEqu5eY3/l99+t7xfl++A/UgAAAABJRU5ErkJggg==);
+}
+
+.v-sliderpanel-tab.open .v-sliderpanel-icon {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAUVBMVEX///////////////////////////////////////////////////////////////////////////////////////////////////////////94FlRsAAAAGnRSTlMAAREgIig2NzhAQUJWgoOEhqChp8vMzdf4+ZRjm1EAAABmSURBVHjaXc5ZDoAwCATQwarVutd97n9QlRCT9n2SAQYfCUNcpyAwfqPaPFR/0Vw9XvXN310DYnnbEgQmWoxMjIjkWZWqOslFB65QTgf5Sn40ZG93AXxaLK+umsPyHka6Ka5zJ3g9Tp4RixdNH3gAAAAASUVORK5CYII=);
+}
