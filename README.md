@@ -13,7 +13,7 @@ Add the dependency to your pom and add it in the GWT inherits.
 <dependency>
     <groupId>org.vaadin</groupId>
     <artifactId>vaadin-sliderpanel</artifactId>
-    <version>${vaadin-jcrop-version}</version>
+    <version>${vaadin-sliderpanel-version}</version>
 </dependency>
 ```
 
