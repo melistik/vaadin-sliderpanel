@@ -58,7 +58,7 @@ public class SliderPanelSampleUI extends UI {
 		VerticalLayout contentLabel = dummyContent("Main Content", 10);
 		contentLabel.setSizeFull();
 
-		final Label listenerLabel = new Label("event-listener for bottom-slider", ContentMode.HTML);
+		final Label listenerLabel = new Label("event-listener for right-slider", ContentMode.HTML);
 		listenerLabel.setWidth(100, Unit.PERCENTAGE);
 		listenerLabel.setHeight(45, Unit.PIXELS);
 		contentLabel.addComponent(listenerLabel);
@@ -73,6 +73,12 @@ public class SliderPanelSampleUI extends UI {
 		SliderPanel rightSlider = new SliderPanel(rightDummyContent, SliderMode.RIGHT);
 		rightSlider.setCaption("Right Slider");
 		rightSlider.setTabPosition(SliderTabPosition.MIDDLE);
+		rightSlider.addListener(new SliderPanelListener() {
+			@Override
+			public void onToggle(final boolean expand) {
+				listenerLabel.setValue("event-listener for right-slider: <b>" + (expand ? "expand" : "collapsed") + "</b> by: " + new Date().toString());
+			}
+		});
 		contentLayout.addComponent(rightSlider);
 
 		// fit full screen
@@ -82,12 +88,6 @@ public class SliderPanelSampleUI extends UI {
 		// bottom slider
 		SliderPanel bottomSlider = new SliderPanel(dummyContent("Bottom Slider Heading", 5), false, SliderMode.BOTTOM);
 		bottomSlider.setCaption("Bottom Slider");
-		bottomSlider.addListener(new SliderPanelListener() {
-			@Override
-			public void onToggle(final boolean expand) {
-				listenerLabel.setValue("event-listener for bottom-slider: <b>" + (expand ? "expand" : "collapsed") + "</b> by: " + new Date().toString());
-			}
-		});
 		mainLayout.addComponent(bottomSlider);
 
 		setContent(mainLayout);
@@ -98,7 +98,9 @@ public class SliderPanelSampleUI extends UI {
 		for (int x = 0; x <= length; x++) {
 			text += LOREM_IPSUM + " ";
 		}
-		VerticalLayout component = new VerticalLayout(new Label(String.format("<h3>%s</h3>%s", title, text.trim()), ContentMode.HTML));
+		Label htmlDummy = new Label(String.format("<h3>%s</h3>%s", title, text.trim()), ContentMode.HTML);
+		VerticalLayout component = new VerticalLayout(htmlDummy);
+		component.setExpandRatio(htmlDummy, 1);
 		component.setMargin(true);
 		component.setSpacing(true);
 		return component;
