@@ -1,27 +1,39 @@
 package org.vaadin.sliderpanel.client;
 
+import org.vaadin.sliderpanel.SliderPanel;
+
 import com.google.gwt.animation.client.Animation;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+/**
+ * the main gwt implementation of the {@link SliderPanel}
+ *
+ * @author Marten Prieß (http://www.non-rocket-science.com)
+ * @version 1.0
+ */
 public class VSliderPanel extends SimplePanel {
 
 	public static final String CLASSNAME = "v-sliderpanel";
 
-	private final DivElement wrapperNode, contentNode, navigationElem, captionNode, line, tabElem;
+	private final DivElement wrapperNode, contentNode, navigationElem, captionNode, tabElem;
 	private boolean expand = false;
 	private int animationDuration;
-	private Integer componentHeight = null;
+	private Integer componentSize = null;
 	private SliderMode mode = null;
 	private final SliderTabPosition tabPosition = null;
 
 	private final SliderAnimation slideAnimation = new SliderAnimation();
-	private VSliderPanelToggleListener listener;
+	private SliderPanelListener listener;
+
+	private static int TAB_SIZE = 40;
+	private static int TAB_LENGTH_SIZE = 260;
 
 	public VSliderPanel() {
 		super();
@@ -43,11 +55,6 @@ public class VSliderPanel extends SimplePanel {
 		this.navigationElem = Document.get()
 				.createDivElement();
 		this.navigationElem.setClassName(VSliderPanel.CLASSNAME + "-navigator");
-
-		this.line = Document.get()
-				.createDivElement();
-		this.line.setClassName(VSliderPanel.CLASSNAME + "-line");
-		this.navigationElem.appendChild(this.line);
 
 		this.tabElem = Document.get()
 				.createDivElement();
@@ -73,14 +80,12 @@ public class VSliderPanel extends SimplePanel {
 			this.mode = sliderMode;
 			this.wrapperNode.addClassName("mode-" + this.mode.name()
 					.toLowerCase());
+			this.wrapperNode.addClassName("layout-" + (this.mode.isVertical() ? "vertical" : "horizontal"));
 
-			if (this.mode.equals(SliderMode.BOTTOM)) {
+			if (this.mode.equals(SliderMode.BOTTOM) || this.mode.equals(SliderMode.LEFT)) {
 				// rearrange order contentNode after navigationElem
 				this.wrapperNode.removeChild(this.contentNode);
 				this.wrapperNode.appendChild(this.contentNode);
-
-				this.navigationElem.removeChild(this.line);
-				this.navigationElem.appendChild(this.line);
 			}
 		}
 	}
@@ -99,8 +104,12 @@ public class VSliderPanel extends SimplePanel {
 		animateTo(expand, 0);
 	}
 
-	public void setCaption(final String caption) {
-		this.captionNode.setInnerHTML(caption);
+	public void setCaption(final String caption, final boolean captionAsHtml) {
+		String captionContent = caption;
+		if (!captionAsHtml) {
+			captionContent = SafeHtmlUtils.htmlEscape(caption);
+		}
+		this.captionNode.setInnerHTML(captionContent);
 	}
 
 	public void setExpand(final boolean expand, final boolean animated) {
@@ -132,6 +141,11 @@ public class VSliderPanel extends SimplePanel {
 		super.onBrowserEvent(event);
 	}
 
+	/**
+	 * used to log in javascript console
+	 * 
+	 * @param message
+	 */
 	native void consoleLog(String message) /*-{
 											console.log( message );
 											}-*/;
@@ -142,7 +156,7 @@ public class VSliderPanel extends SimplePanel {
 		return DOM.asOld(this.contentNode);
 	}
 
-	public void setToggleListener(final VSliderPanelToggleListener toggleListener) {
+	public void setToggleListener(final SliderPanelListener toggleListener) {
 		this.listener = toggleListener;
 	}
 
@@ -153,32 +167,58 @@ public class VSliderPanel extends SimplePanel {
 			this.animateToExpand = expand;
 		}
 
+		private void changeSize(final double size) {
+			if (VSliderPanel.this.mode.isVertical()) {
+				VSliderPanel.this.contentNode.getStyle()
+						.setWidth(size, Style.Unit.PX);
+				if (VSliderPanel.this.mode.equals(SliderMode.RIGHT)) {
+					VSliderPanel.this.contentNode.getStyle()
+							.setLeft(((-1) * size) + TAB_SIZE, Style.Unit.PX);
+					VSliderPanel.this.tabElem.getStyle()
+							.setRight(size + (TAB_LENGTH_SIZE / 2) - (TAB_SIZE / 2), Style.Unit.PX);
+
+				} else {
+					VSliderPanel.this.tabElem.getStyle()
+							.setMarginLeft(size + ((TAB_LENGTH_SIZE / 2) * (-1) + (TAB_SIZE / 2)), Style.Unit.PX);
+
+				}
+			} else {
+				VSliderPanel.this.contentNode.getStyle()
+						.setHeight(size, Style.Unit.PX);
+				if (VSliderPanel.this.mode.equals(SliderMode.BOTTOM)) {
+					VSliderPanel.this.contentNode.getStyle()
+							.setTop((-1) * size, Style.Unit.PX);
+					VSliderPanel.this.tabElem.getStyle()
+							.setTop((-1) * size, Style.Unit.PX);
+				}
+			}
+		}
+
 		@Override
 		protected void onUpdate(final double progress) {
-			final double height = extractProportionalLength(progress);
-			VSliderPanel.this.contentNode.getStyle()
-					.setHeight(height, Style.Unit.PX);
-			if (VSliderPanel.this.mode.equals(SliderMode.BOTTOM)) {
-				VSliderPanel.this.contentNode.getStyle()
-						.setTop((-1) * height, Style.Unit.PX);
-				VSliderPanel.this.tabElem.getStyle()
-						.setTop((-1) * height, Style.Unit.PX);
-			}
+			changeSize(extractProportionalLength(progress));
 		}
 
 		@Override
 		protected void onStart() {
 			VSliderPanel.this.contentNode.getStyle()
 					.setDisplay(Display.BLOCK);
-			consoleLog("mode: " + VSliderPanel.this.mode + ", onStart: " + this.animateToExpand);
-			if (VSliderPanel.this.componentHeight == null || VSliderPanel.this.componentHeight <= 0) {
-				VSliderPanel.this.contentNode.getStyle()
-						.clearHeight();
-				if (VSliderPanel.this.contentNode.getFirstChildElement() != null) {
-					VSliderPanel.this.componentHeight = VSliderPanel.this.contentNode.getFirstChildElement()
-							.getOffsetHeight();
+			if (VSliderPanel.this.componentSize == null || VSliderPanel.this.componentSize <= 0) {
+				if (VSliderPanel.this.mode.isVertical()) {
+					VSliderPanel.this.contentNode.getStyle()
+							.clearWidth();
+					if (VSliderPanel.this.contentNode.getFirstChildElement() != null) {
+						VSliderPanel.this.componentSize = VSliderPanel.this.contentNode.getFirstChildElement()
+								.getOffsetWidth();
+					}
+				} else {
+					VSliderPanel.this.contentNode.getStyle()
+							.clearHeight();
+					if (VSliderPanel.this.contentNode.getFirstChildElement() != null) {
+						VSliderPanel.this.componentSize = VSliderPanel.this.contentNode.getFirstChildElement()
+								.getOffsetHeight();
+					}
 				}
-				consoleLog("componentHeight: " + VSliderPanel.this.componentHeight);
 			}
 		};
 
@@ -190,16 +230,9 @@ public class VSliderPanel extends SimplePanel {
 			if (!VSliderPanel.this.expand) {
 				VSliderPanel.this.contentNode.getStyle()
 						.setDisplay(Display.NONE);
+				changeSize(0);
 			} else {
-				VSliderPanel.this.contentNode.getStyle()
-						.setHeight(VSliderPanel.this.componentHeight, Style.Unit.PX);
-
-				if (VSliderPanel.this.mode.equals(SliderMode.BOTTOM)) {
-					VSliderPanel.this.contentNode.getStyle()
-							.setTop((-1) * VSliderPanel.this.componentHeight, Style.Unit.PX);
-					VSliderPanel.this.tabElem.getStyle()
-							.setTop((-1) * VSliderPanel.this.componentHeight, Style.Unit.PX);
-				}
+				changeSize(VSliderPanel.this.componentSize);
 			}
 
 			if (VSliderPanel.this.listener != null) {
@@ -209,9 +242,9 @@ public class VSliderPanel extends SimplePanel {
 
 		private int extractProportionalLength(final double progress) {
 			if (this.animateToExpand) {
-				return (int) (VSliderPanel.this.componentHeight * progress);
+				return (int) (VSliderPanel.this.componentSize * progress);
 			} else {
-				return (int) (VSliderPanel.this.componentHeight * (1.0 - progress));
+				return (int) (VSliderPanel.this.componentSize * (1.0 - progress));
 			}
 		}
 	}

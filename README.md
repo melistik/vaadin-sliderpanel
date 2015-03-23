@@ -18,7 +18,7 @@ Add the dependency to your pom and add it in the GWT inherits.
 ```
 
 ```xml
-	<inherits name="org.vaadin.sliderpanel.Widgetset" />
+<inherits name="org.vaadin.sliderpanel.Widgetset" />
 ```
 
 The MIT License (MIT)

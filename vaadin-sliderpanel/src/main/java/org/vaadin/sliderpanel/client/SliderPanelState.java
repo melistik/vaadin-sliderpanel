@@ -13,5 +13,5 @@ public class SliderPanelState extends AbstractComponentState {
 	public int animationDuration = 500;
 	public boolean expand = false;
 	public SliderMode mode = SliderMode.TOP;
-	public SliderTabPosition tabPosition = SliderTabPosition.END;
+	public SliderTabPosition tabPosition = SliderTabPosition.BEGINNING;
 }

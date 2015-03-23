@@ -10,6 +10,12 @@ import com.vaadin.client.ui.AbstractSingleComponentContainerConnector;
 import com.vaadin.client.ui.SimpleManagedLayout;
 import com.vaadin.shared.ui.Connect;
 
+/**
+ * connects SliderPanel with GWT VSliderPanel
+ *
+ * @author Marten Prieß (http://www.non-rocket-science.com)
+ * @version 1.0
+ */
 @Connect(SliderPanel.class)
 public class SliderPanelConnector extends AbstractSingleComponentContainerConnector implements SimpleManagedLayout {
 
@@ -18,7 +24,7 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 	public SliderPanelConnector() {
 		super();
 
-		getWidget().setToggleListener(new VSliderPanelToggleListener() {
+		getWidget().setToggleListener(new SliderPanelListener() {
 
 			@Override
 			public void onToggle(final boolean expanded) {
@@ -60,7 +66,7 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 	public void onStateChanged(final StateChangeEvent stateChangeEvent) {
 		super.onStateChanged(stateChangeEvent);
 		getWidget().setAnimationDuration(getState().animationDuration);
-		getWidget().setCaption(getState().caption);
+		getWidget().setCaption(getState().caption, getState().captionAsHtml);
 		getWidget().setMode(getState().mode);
 		getWidget().setTabPosition(getState().tabPosition);
 	}

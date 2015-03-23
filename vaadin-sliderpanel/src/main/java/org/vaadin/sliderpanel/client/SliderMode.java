@@ -8,20 +8,35 @@ package org.vaadin.sliderpanel.client;
  */
 public enum SliderMode {
 
-    /**
-     * slides from top to bottom
-     */
-    TOP,
-    /**
-     * slides from right to left
-     */
-    RIGHT,
-    /**
-     * slides from bottom to top
-     */
-    BOTTOM,
-    /**
-     * slides from left to right
-     */
-    LEFT;
+	/**
+	 * slides from top to bottom
+	 */
+	TOP(false),
+	/**
+	 * slides from right to left
+	 */
+	RIGHT(true),
+	/**
+	 * slides from bottom to top
+	 */
+	BOTTOM(false),
+	/**
+	 * slides from left to right
+	 */
+	LEFT(true);
+
+	private boolean vertical;
+
+	SliderMode(final boolean vertical) {
+		this.vertical = vertical;
+	}
+
+	/**
+	 * layout is vertical
+	 * 
+	 * @return
+	 */
+	public boolean isVertical() {
+		return this.vertical;
+	}
 }

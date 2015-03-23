@@ -6,6 +6,13 @@
 .idea/
 *.iml
 
+### scss
+*.css.map
+.sass-cache
+**/scss/*.css
+sass
+*.css
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Eclipse template
 *.pydevproject
