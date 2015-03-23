@@ -117,7 +117,7 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
-                        <phase>deploy</phase>
+                        <phase>package</phase>
                     </execution>
                 </executions>
             </plugin>
