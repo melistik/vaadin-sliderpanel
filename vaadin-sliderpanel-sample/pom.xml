@@ -49,11 +49,12 @@
             <version>${vaadin.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-client-compiled</artifactId>
-            <version>${vaadin.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client-compiler</artifactId>
+			<version>${vaadin.version}</version>
+			<scope>provided</scope>
+		</dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-themes</artifactId>
@@ -100,6 +101,30 @@
                         </fileset>
                     </filesets>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.version}</version>
+                <configuration>
+                    <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+                    <webappDirectory>${basedir}/target/classes/VAADIN/widgetsets</webappDirectory>
+                    <draftCompile>false</draftCompile>
+                    <compileReport>false</compileReport>
+                    <style>OBF</style>
+                    <strict>true</strict>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>update-widgetset</goal>
+                            <goal>compile</goal>
+                            <!-- disabled by default to use on-the-fly theme compilation -->
+                            <!-- <goal>compile-theme</goal> -->
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- The Jetty plugin allows us to easily test the development build by

@@ -48,6 +48,15 @@
     </dependencies>
 
     <build>
+    	<resources>
+            <resource>
+                <directory>src/main/java</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        
         <plugins>
         	<plugin>
 			  <groupId>org.jasig.maven</groupId>
@@ -121,30 +130,6 @@
                     </execution>
                 </executions>
             </plugin>
-            
-            <plugin>
-				<groupId>com.vaadin</groupId>
-				<artifactId>vaadin-maven-plugin</artifactId>
-				<version>${vaadin.version}</version>
-				<configuration>
-					<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
-					<webappDirectory>${basedir}/target/classes/VAADIN/widgetsets</webappDirectory>
-					<draftCompile>false</draftCompile>
-					<compileReport>false</compileReport>
-					<style>OBF</style>
-					<strict>true</strict>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>update-widgetset</goal>
-							<goal>compile</goal>
-							<!-- disabled by default to use on-the-fly theme compilation -->
-							<!-- <goal>compile-theme</goal> -->
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
         </plugins>
         
         <pluginManagement>
