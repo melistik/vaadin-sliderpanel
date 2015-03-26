@@ -13,7 +13,7 @@ Add the dependency to your pom and add it in the GWT inherits.
 
 ```xml
 <dependency>
-    <groupId>org.vaadin</groupId>
+    <groupId>org.vaadin.addons</groupId>
     <artifactId>vaadin-sliderpanel</artifactId>
     <version>${vaadin-sliderpanel-version}</version>
 </dependency>
