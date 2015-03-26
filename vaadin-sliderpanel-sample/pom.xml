@@ -111,7 +111,7 @@
 				<executions>
 					<execution>
 						<configuration>
-							<module>org.vaadin.slidersample.Widgetset</module>
+							<module>org.vaadin.slidersample.WidgetSet</module>
 							<failOnError>true</failOnError>
 							<compileReport>true</compileReport>
 							<webappDirectory>${project.build.outputDirectory}/VAADIN/widgetsets</webappDirectory>
