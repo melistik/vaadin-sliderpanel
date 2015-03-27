@@ -21,7 +21,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Theme("valo")
-@Widgetset("org.vaadin.slidersample.Widgetset")
+@Widgetset("org.vaadin.slidersample.WidgetSet")
 public class SliderPanelSampleUI extends UI {
 
 	private static final String LOREM_IPSUM = "Lorem ipsum dolor sit amet,consetetur sadipscing elitr, "
