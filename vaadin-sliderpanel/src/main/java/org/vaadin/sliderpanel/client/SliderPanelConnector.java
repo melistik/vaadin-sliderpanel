@@ -78,6 +78,8 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 
 	@Override
 	public void layout() {
+		// in case onStateChanged is not fired before
+		getWidget().setMode(getState().mode);
 		getWidget().initialize(getState().expand);
 	}
 
