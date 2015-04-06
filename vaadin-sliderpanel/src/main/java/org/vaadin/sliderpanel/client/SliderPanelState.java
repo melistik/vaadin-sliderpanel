@@ -14,4 +14,5 @@ public class SliderPanelState extends AbstractComponentState {
 	public boolean expand = false;
 	public SliderMode mode = null;
 	public SliderTabPosition tabPosition = SliderTabPosition.BEGINNING;
+	public boolean captionAsHtml = false;
 }

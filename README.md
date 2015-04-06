@@ -9,7 +9,7 @@ Panel that is able to get collapsed and expand. The expand mode lays over the co
 Workflow
 ========
 
-Add the dependency to your pom and add it in the GWT inherits.
+Add the dependency to your pom the GWT inherits will get automatically added by the maven-vaadin-plugin.
 
 ```xml
 <dependency>
@@ -37,6 +37,31 @@ You can recolor the panel by changing the css like:
 ```
 
 Details to the addon you can find on [Vaadin](https://vaadin.com/directory#addon/sliderpanel)
+
+Layouting
+========
+![layout-mockup](sliderpanel-layouting.png)
+It's important that you take care for the main layout. Use a combination of VerticalLayout and HorizontalLayout. The SliderPosition is only a hint for the component in which direction the slider should get expand. When you place for example as first component a SliderPanel with SliderMode.RIGHT to a HorizontalLayout and afterwards the middleContent with ExpandRatio(1) it will expand outside the visible browserarea.
+
+```java
+protected void init(final VaadinRequest vaadinRequest) {
+	final HorizontalLayout mainLayout = new HorizontalLayout();
+	mainLayout.setSizeFull();
+	
+	SliderPanel rightSlider = new SliderPanel(new Label("<h2>SliderContent</h2>", ContentMode.HTML), SliderMode.RIGHT);
+	rightSlider.setCaption("SliderCaption");
+	mainLayout.addComponent(rightSlider);
+	
+	VerticalLayout middleContent = new VerticalLayout();
+	middleContent.setSizeFull();
+	middleContent.addComponent(new Label("<h1>MiddleContent</h1><p>Lots of Content ...</p>", ContentMode.HTML));
+	
+	mainLayout.addComponent(middleContent);
+	mainLayout.setExpandRatio(middleContent, 1);
+	setContent(mainLayout);
+}
+```
+![wrong-sample](sliderpanel-wrong-sample.png)
 
 The MIT License (MIT)
 -------------------------
