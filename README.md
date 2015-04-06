@@ -63,6 +63,11 @@ protected void init(final VaadinRequest vaadinRequest) {
 ```
 ![wrong-sample](sliderpanel-wrong-sample.png)
 
+The Layouting of the SliderPanel is not made absolute because of the possibility to use it also within the layout:
+
+![layout-variant](sliderpanel-layouting-variant.png)
+
+
 The MIT License (MIT)
 -------------------------
 
