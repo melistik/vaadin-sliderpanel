@@ -3,7 +3,7 @@ Vaadin SliderPanel
 
 Panel that is able to get collapsed and expand. The expand mode lays over the content...
 
-![showcase](showcase.gif)
+![showcase](assets/showcase.gif)
 
 
 Workflow
@@ -40,7 +40,7 @@ Details to the addon you can find on [Vaadin](https://vaadin.com/directory#addon
 
 Layouting
 ========
-![layout-mockup](sliderpanel-layouting.png)
+![layout-mockup](assets/sliderpanel-layouting.png)
 It's important that you take care for the main layout. Use a combination of VerticalLayout and HorizontalLayout. The SliderPosition is only a hint for the component in which direction the slider should get expand. When you place for example as first component a SliderPanel with SliderMode.RIGHT to a HorizontalLayout and afterwards the middleContent with ExpandRatio(1) it will expand outside the visible browserarea.
 
 ```java
@@ -61,11 +61,11 @@ protected void init(final VaadinRequest vaadinRequest) {
 	setContent(mainLayout);
 }
 ```
-![wrong-sample](sliderpanel-wrong-sample.png)
+![wrong-sample](assets/sliderpanel-wrong-sample.png)
 
 The Layouting of the SliderPanel is not made absolute because of the possibility to use it also within the layout:
 
-![layout-variant](sliderpanel-layouting-variant.png)
+![layout-variant](assets/sliderpanel-layouting-variant.png)
 
 
 The MIT License (MIT)
