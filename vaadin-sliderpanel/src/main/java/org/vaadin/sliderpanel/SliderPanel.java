@@ -116,19 +116,11 @@ public class SliderPanel extends AbstractSingleComponentContainer {
 	}
 
 	/**
-	 * Caption of the tab
+	 * Caption of the tab escape HTML
 	 */
 	@Override
 	public void setCaption(final String caption) {
 		getState().caption = caption;
-	}
-
-	/**
-	 * by default the caption escape HTML chars
-	 */
-	@Override
-	public void setCaptionAsHtml(final boolean captionAsHtml) {
-		getState().captionAsHtml = captionAsHtml;
 	}
 
 	/**

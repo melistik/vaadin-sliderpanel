@@ -66,7 +66,7 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 	public void onStateChanged(final StateChangeEvent stateChangeEvent) {
 		super.onStateChanged(stateChangeEvent);
 		getWidget().setAnimationDuration(getState().animationDuration);
-		getWidget().setCaption(getState().caption, getState().captionAsHtml);
+		getWidget().setCaption(getState().caption, false);
 		getWidget().setMode(getState().mode);
 		getWidget().setTabPosition(getState().tabPosition);
 	}
