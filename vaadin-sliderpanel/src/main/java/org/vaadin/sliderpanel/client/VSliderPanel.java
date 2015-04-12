@@ -172,24 +172,23 @@ public class VSliderPanel extends SimplePanel {
 				VSliderPanel.this.contentNode.getStyle()
 						.setWidth(size, Style.Unit.PX);
 				if (VSliderPanel.this.mode.equals(SliderMode.RIGHT)) {
+					VSliderPanel.this.navigationElem.getStyle().setLeft(-1 * size, Style.Unit.PX);
 					VSliderPanel.this.contentNode.getStyle()
-							.setLeft(((-1) * size) + TAB_SIZE, Style.Unit.PX);
-					VSliderPanel.this.tabElem.getStyle()
-							.setRight(size + (TAB_LENGTH_SIZE / 2) - (TAB_SIZE / 2), Style.Unit.PX);
-
+							.setLeft(-1 * size + TAB_SIZE , Style.Unit.PX);
 				} else {
-					VSliderPanel.this.tabElem.getStyle()
-							.setMarginLeft(size + ((TAB_LENGTH_SIZE / 2) * (-1) + (TAB_SIZE / 2)), Style.Unit.PX);
-
+					VSliderPanel.this.navigationElem.getStyle().setRight(-1 * size, Style.Unit.PX);
 				}
 			} else {
 				VSliderPanel.this.contentNode.getStyle()
 						.setHeight(size, Style.Unit.PX);
 				if (VSliderPanel.this.mode.equals(SliderMode.BOTTOM)) {
 					VSliderPanel.this.contentNode.getStyle()
-							.setTop((-1) * size, Style.Unit.PX);
-					VSliderPanel.this.tabElem.getStyle()
-							.setTop((-1) * size, Style.Unit.PX);
+							.setTop(-1 * size + TAB_SIZE, Style.Unit.PX);
+					VSliderPanel.this.navigationElem.getStyle()
+							.setTop(-1 * size, Style.Unit.PX);
+				} else {
+					VSliderPanel.this.navigationElem.getStyle()
+							.setTop( size, Style.Unit.PX);
 				}
 			}
 		}

@@ -21,7 +21,7 @@ import com.vaadin.ui.Component;
  */
 public class SliderPanel extends AbstractSingleComponentContainer {
 
-	private final List<SliderPanelListener> listeners = new ArrayList<>();
+	private final List<SliderPanelListener> listeners = new ArrayList<SliderPanelListener>();
 
 	private final SliderPanelServerRpc rpc = new SliderPanelServerRpc() {
 		@Override
