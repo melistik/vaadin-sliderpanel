@@ -15,8 +15,12 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -101,6 +105,12 @@ public class SliderPanelSampleUI extends UI {
 		Label htmlDummy = new Label(String.format("<h3>%s</h3>%s", title, text.trim()), ContentMode.HTML);
 		VerticalLayout component = new VerticalLayout(htmlDummy);
 		component.setExpandRatio(htmlDummy, 1);
+		component.addComponent(new Button(title, new Button.ClickListener() {
+			@Override
+			public void buttonClick(final ClickEvent event) {
+				Notification.show("clicked: " + title, Type.HUMANIZED_MESSAGE);
+			}
+		}));
 		component.setMargin(true);
 		component.setSpacing(true);
 		return component;
