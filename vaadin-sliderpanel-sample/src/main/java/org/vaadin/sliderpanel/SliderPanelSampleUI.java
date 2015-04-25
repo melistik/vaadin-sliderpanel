@@ -10,7 +10,6 @@ import org.vaadin.sliderpanel.client.SliderTabPosition;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -25,7 +24,6 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Theme("valo")
-@Widgetset("org.vaadin.slidersample.WidgetSet")
 public class SliderPanelSampleUI extends UI {
 
 	private static final String LOREM_IPSUM = "Lorem ipsum dolor sit amet,consetetur sadipscing elitr, "
@@ -39,7 +37,7 @@ public class SliderPanelSampleUI extends UI {
 		mainLayout.setSpacing(false);
 
 		// top slider
-		SliderPanel topSlider = new SliderPanel(dummyContent("Top Slider Heading", 3), false, SliderMode.TOP);
+		final SliderPanel topSlider = new SliderPanel(dummyContent("Top Slider Heading", 3), false, SliderMode.TOP);
 		topSlider.setCaption("Top Slider");
 		topSlider.setTabPosition(SliderTabPosition.BEGINNING);
 
@@ -61,6 +59,15 @@ public class SliderPanelSampleUI extends UI {
 		// dummy middle content
 		VerticalLayout contentLabel = dummyContent("Main Content", 10);
 		contentLabel.setSizeFull();
+
+		contentLabel.addComponent(new Button("schedule toggle top-slider", new Button.ClickListener() {
+
+			@Override
+			public void buttonClick(final ClickEvent event) {
+				Notification.show("start schedule toggle on top-slider in 2 secs", Type.TRAY_NOTIFICATION);
+				topSlider.scheduleToggle(2000);
+			}
+		}));
 
 		final Label listenerLabel = new Label("event-listener for right-slider", ContentMode.HTML);
 		listenerLabel.setWidth(100, Unit.PERCENTAGE);
@@ -122,7 +129,8 @@ public class SliderPanelSampleUI extends UI {
 			asyncSupported = true)
 	@VaadinServletConfiguration(
 			ui = org.vaadin.sliderpanel.SliderPanelSampleUI.class,
-			productionMode = false)
+			productionMode = false,
+			widgetset = "org.vaadin.slidersample.WidgetSet")
 	public static class MyUIServlet extends VaadinServlet {
 	}
 }

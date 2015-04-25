@@ -10,6 +10,7 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 /**
@@ -172,11 +173,13 @@ public class VSliderPanel extends SimplePanel {
 				VSliderPanel.this.contentNode.getStyle()
 						.setWidth(size, Style.Unit.PX);
 				if (VSliderPanel.this.mode.equals(SliderMode.RIGHT)) {
-					VSliderPanel.this.navigationElem.getStyle().setLeft(-1 * size, Style.Unit.PX);
+					VSliderPanel.this.navigationElem.getStyle()
+							.setLeft(-1 * size, Style.Unit.PX);
 					VSliderPanel.this.contentNode.getStyle()
-							.setLeft(-1 * size + TAB_SIZE , Style.Unit.PX);
+							.setLeft(-1 * size + TAB_SIZE, Style.Unit.PX);
 				} else {
-					VSliderPanel.this.navigationElem.getStyle().setRight(-1 * size, Style.Unit.PX);
+					VSliderPanel.this.navigationElem.getStyle()
+							.setRight(-1 * size, Style.Unit.PX);
 				}
 			} else {
 				VSliderPanel.this.contentNode.getStyle()
@@ -188,7 +191,7 @@ public class VSliderPanel extends SimplePanel {
 							.setTop(-1 * size, Style.Unit.PX);
 				} else {
 					VSliderPanel.this.navigationElem.getStyle()
-							.setTop( size, Style.Unit.PX);
+							.setTop(size, Style.Unit.PX);
 				}
 			}
 		}
@@ -251,6 +254,30 @@ public class VSliderPanel extends SimplePanel {
 	public void animateTo(final boolean expand, final int duration) {
 		this.slideAnimation.setAnimateToExpand(expand);
 		this.slideAnimation.run(duration);
+	}
+
+	public class ScheduleTimer extends Timer {
+		private boolean expand, animated;
+
+		@Override
+		public void run() {
+			setExpand(this.expand, this.animated);
+		}
+
+		public void setValues(final boolean expand, final boolean animated) {
+			this.expand = expand;
+			this.animated = animated;
+		}
+	}
+
+	private ScheduleTimer scheduleTimer;
+
+	public void scheduleExpand(final boolean expand, final boolean animated, final int delayMillis) {
+		if (this.scheduleTimer == null) {
+			this.scheduleTimer = new ScheduleTimer();
+		}
+		this.scheduleTimer.setValues(expand, animated);
+		this.scheduleTimer.schedule(delayMillis);
 	}
 
 }

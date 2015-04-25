@@ -10,6 +10,8 @@ import com.vaadin.shared.communication.ClientRpc;
  */
 public interface SliderPanelClientRpc extends ClientRpc {
 
-    void setExpand(boolean expand, boolean animated);
+	void setExpand(boolean expand, boolean animated);
+
+	void scheduleExpand(boolean expand, boolean animated, int delayMillis);
 
 }

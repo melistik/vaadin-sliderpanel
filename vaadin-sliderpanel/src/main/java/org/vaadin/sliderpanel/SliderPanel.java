@@ -196,4 +196,52 @@ public class SliderPanel extends AbstractSingleComponentContainer {
 		getRpcProxy(SliderPanelClientRpc.class).setExpand(true, true);
 	}
 
+	/**
+	 * schedule a state change of the slider on client site<br>
+	 * a recall within the schedule will cancel the previous one
+	 * 
+	 * @param value
+	 *            true means expand
+	 * @param animated
+	 *            should be animated or not
+	 * @param delayMillis
+	 *            millis in future the task will happen
+	 */
+	public void scheduleExpand(final boolean value, final boolean animated, final int delayMillis) {
+		getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(value, animated, delayMillis);
+	}
+
+	/**
+	 * schedule a change from expand to collapse vice versa in future. will trigger a timer on client site that will change the slider state<br>
+	 * a recall within the schedule will cancel the previous one
+	 * 
+	 * @param delayMillis
+	 *            millis in future the task will happen
+	 */
+	public void scheduleToggle(final int delayMillis) {
+		getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(!getState().expand, true, delayMillis);
+	}
+
+	/**
+	 * schedule a collapse in future. will trigger a timer on client site that will collapse the slider<br>
+	 * a recall within the schedule will cancel the previous one
+	 * 
+	 * @param delayMillis
+	 *            millis in future the task will happen
+	 */
+	public void scheduleCollapse(final int delayMillis) {
+		getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(false, true, delayMillis);
+	}
+
+	/**
+	 * schedule an expand in future. will trigger a timer on client site that will expand the slider<br>
+	 * a recall within the schedule will cancel the previous one
+	 * 
+	 * @param delayMillis
+	 *            millis in future the task will happen
+	 */
+	public void scheduleExpand(final int delayMillis) {
+		getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(true, true, delayMillis);
+	}
+
 }

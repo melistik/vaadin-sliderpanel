@@ -39,6 +39,11 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 				getWidget().setExpand(expand, animated);
 				getState().expand = expand;
 			}
+
+			@Override
+			public void scheduleExpand(final boolean expand, final boolean animated, final int delayMillis) {
+				getWidget().scheduleExpand(expand, animated, delayMillis);
+			}
 		});
 
 	}
