@@ -136,6 +136,7 @@ $tab-caption-size-v: 210;
   position: relative;
   top: 0;
   z-index: 9991;
+  pointer-events: none;
 }
 
 
@@ -147,6 +148,7 @@ $tab-caption-size-v: 210;
   font-size: 0.8em;
   cursor: pointer;
   background: #808080;
+  pointer-events: all;
 
   &.closed {
     .v-sliderpanel-icon {
