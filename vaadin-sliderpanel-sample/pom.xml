@@ -72,7 +72,7 @@
 					<encoding>${project.encoding}</encoding>
 				</configuration>
 			</plugin>
-
+			
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
@@ -150,6 +150,14 @@
 								<include>**/styles.css</include>
 								<include>**/styles.scss.cache</include>
 							</includes>
+						</fileset>
+						<fileset>
+							<!-- Clean-up widgetset required for "inplace" compilation -->
+							<directory>${basedir}/src/main/webapp/VAADIN/widgetsets</directory>
+						</fileset>
+						<fileset>
+							<!-- Clean-up gwt cache -->
+							<directory>${basedir}/src/main/webapp/VAADIN/gwt-unitCache</directory>
 						</fileset>
 					</filesets>
 				</configuration>
