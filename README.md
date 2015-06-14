@@ -36,6 +36,16 @@ You can recolor the panel by changing the css like:
 }
 ```
 
+Version 1.1.x introduced some extra colors that you can use for example:
+
+```java
+SliderPanel sliderPanel = new SliderPanel(dummyContent("White Slider", 3), false, SliderMode.TOP);
+firstTopSlider.setCaption("White Slider");
+firstTopSlider.addStyleName(SliderPanelStyles.COLOR_WHITE);
+```
+
+The class **SliderPanelStyles** holds the style options. Further more you can place your custom StyleName in the same way...
+
 Details to the addon you can find on [Vaadin](https://vaadin.com/directory#addon/sliderpanel)
 
 Layouting
