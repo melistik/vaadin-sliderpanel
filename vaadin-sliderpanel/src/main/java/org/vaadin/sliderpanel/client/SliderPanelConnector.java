@@ -8,6 +8,7 @@ import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractSingleComponentContainerConnector;
 import com.vaadin.client.ui.SimpleManagedLayout;
+import com.vaadin.shared.ui.ComponentStateUtil;
 import com.vaadin.shared.ui.Connect;
 
 /**
@@ -29,7 +30,6 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 			@Override
 			public void onToggle(final boolean expanded) {
 				SliderPanelConnector.this.rpc.clicked(expanded);
-				getState().expand = expanded;
 			}
 		});
 
@@ -37,7 +37,6 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 			@Override
 			public void setExpand(final boolean expand, final boolean animated) {
 				getWidget().setExpand(expand, animated);
-				getState().expand = expand;
 			}
 
 			@Override
@@ -70,10 +69,26 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 	@Override
 	public void onStateChanged(final StateChangeEvent stateChangeEvent) {
 		super.onStateChanged(stateChangeEvent);
-		getWidget().setAnimationDuration(getState().animationDuration);
-		getWidget().setCaption(getState().caption, false);
-		getWidget().setMode(getState().mode);
-		getWidget().setTabPosition(getState().tabPosition);
+
+		if (stateChangeEvent.hasPropertyChanged("animationDuration")) {
+			getWidget().setAnimationDuration(getState().animationDuration);
+		}
+		if (stateChangeEvent.hasPropertyChanged("caption")) {
+			getWidget().setCaption(getState().caption, false);
+		}
+		if (stateChangeEvent.hasPropertyChanged("mode")) {
+			getWidget().setMode(getState().mode);
+		}
+		if (stateChangeEvent.hasPropertyChanged("tabPosition")) {
+			getWidget().setTabPosition(getState().tabPosition);
+		}
+		if (ComponentStateUtil.hasStyles(getState())) {
+			String extraStyles = "";
+			for (String style : getState().styles) {
+				extraStyles += " " + style;
+			}
+			getWidget().setStyles(extraStyles);
+		}
 	}
 
 	@Override
@@ -85,7 +100,7 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 	public void layout() {
 		// in case onStateChanged is not fired before
 		getWidget().setMode(getState().mode);
-		getWidget().initialize(getState().expand);
+		getWidget().initialize(getState().expand, getState().tabSize);
 	}
 
 }

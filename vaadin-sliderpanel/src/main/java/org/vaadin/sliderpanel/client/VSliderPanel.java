@@ -23,6 +23,7 @@ public class VSliderPanel extends SimplePanel {
 
 	public static final String CLASSNAME = "v-sliderpanel";
 
+	private String wrapperBaseClassName = "", tabBaseClassName = "";
 	private final DivElement wrapperNode, contentNode, navigationElem, captionNode, tabElem;
 	private boolean expand = false;
 	private int animationDuration;
@@ -30,11 +31,10 @@ public class VSliderPanel extends SimplePanel {
 	private SliderMode mode = null;
 	private final SliderTabPosition tabPosition = null;
 
+	private int tabSize;
+
 	private final SliderAnimation slideAnimation = new SliderAnimation();
 	private SliderPanelListener listener;
-
-	private static int TAB_SIZE = 40;
-	private static int TAB_LENGTH_SIZE = 260;
 
 	public VSliderPanel() {
 		super();
@@ -83,6 +83,8 @@ public class VSliderPanel extends SimplePanel {
 					.toLowerCase());
 			this.wrapperNode.addClassName("layout-" + (this.mode.isVertical() ? "vertical" : "horizontal"));
 
+			this.wrapperBaseClassName = this.wrapperNode.getClassName();
+
 			if (this.mode.equals(SliderMode.BOTTOM) || this.mode.equals(SliderMode.LEFT)) {
 				// rearrange order contentNode after navigationElem
 				this.wrapperNode.removeChild(this.contentNode);
@@ -98,11 +100,13 @@ public class VSliderPanel extends SimplePanel {
 		}
 		this.tabElem.addClassName("tab-" + tabPosition.name()
 				.toLowerCase());
+		this.tabBaseClassName = this.tabElem.getClassName();
 	}
 
-	public void initialize(final boolean expand) {
+	public void initialize(final boolean expand, final int tabSize) {
 		this.expand = expand;
-		animateTo(expand, 0);
+		this.tabSize = tabSize;
+		animateTo(expand, 0, false);
 	}
 
 	public void setCaption(final String caption, final boolean captionAsHtml) {
@@ -114,7 +118,7 @@ public class VSliderPanel extends SimplePanel {
 	}
 
 	public void setExpand(final boolean expand, final boolean animated) {
-		animateTo(expand, animated ? this.animationDuration : 0);
+		animateTo(expand, animated ? this.animationDuration : 0, true);
 	}
 
 	public void setAnimationDuration(final int animationDuration) {
@@ -137,7 +141,7 @@ public class VSliderPanel extends SimplePanel {
 	@Override
 	public void onBrowserEvent(final Event event) {
 		if (event != null && (event.getTypeInt() == Event.ONCLICK)) {
-			animateTo(!this.expand, this.animationDuration);
+			animateTo(!this.expand, this.animationDuration, true);
 		}
 		super.onBrowserEvent(event);
 	}
@@ -147,9 +151,9 @@ public class VSliderPanel extends SimplePanel {
 	 * 
 	 * @param message
 	 */
-	native void consoleLog(String message) /*-{
-											console.log( message );
-											}-*/;
+	native void consoleLog(final String message) /*-{
+													console.log( message );
+													}-*/;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -163,30 +167,36 @@ public class VSliderPanel extends SimplePanel {
 
 	private class SliderAnimation extends Animation {
 		private boolean animateToExpand = false;
+		private boolean fireToggleEvent = true;
 
-		public void setAnimateToExpand(final boolean expand) {
+		public void setAnimateToExpand(final boolean expand, final boolean fireToggleEvent) {
 			this.animateToExpand = expand;
+			this.fireToggleEvent = fireToggleEvent;
 		}
 
 		private void changeSize(final double size) {
 			if (VSliderPanel.this.mode.isVertical()) {
-				VSliderPanel.this.contentNode.getStyle()
-						.setWidth(size, Style.Unit.PX);
 				if (VSliderPanel.this.mode.equals(SliderMode.RIGHT)) {
+					VSliderPanel.this.contentNode.getStyle()
+							.setWidth(size, Style.Unit.PX);
 					VSliderPanel.this.navigationElem.getStyle()
 							.setLeft(-1 * size, Style.Unit.PX);
 					VSliderPanel.this.contentNode.getStyle()
-							.setLeft(-1 * size + TAB_SIZE, Style.Unit.PX);
+							.setLeft(-1 * size + VSliderPanel.this.tabSize, Style.Unit.PX);
 				} else {
+					VSliderPanel.this.contentNode.getStyle()
+							.setWidth(VSliderPanel.this.componentSize, Style.Unit.PX);
 					VSliderPanel.this.navigationElem.getStyle()
 							.setRight(-1 * size, Style.Unit.PX);
+					VSliderPanel.this.contentNode.getStyle()
+							.setLeft(-1 * (VSliderPanel.this.componentSize - size + VSliderPanel.this.tabSize), Style.Unit.PX);
 				}
 			} else {
 				VSliderPanel.this.contentNode.getStyle()
 						.setHeight(size, Style.Unit.PX);
 				if (VSliderPanel.this.mode.equals(SliderMode.BOTTOM)) {
 					VSliderPanel.this.contentNode.getStyle()
-							.setTop(-1 * size + TAB_SIZE, Style.Unit.PX);
+							.setTop(-1 * size + VSliderPanel.this.tabSize, Style.Unit.PX);
 					VSliderPanel.this.navigationElem.getStyle()
 							.setTop(-1 * size, Style.Unit.PX);
 				} else {
@@ -237,7 +247,7 @@ public class VSliderPanel extends SimplePanel {
 				changeSize(VSliderPanel.this.componentSize);
 			}
 
-			if (VSliderPanel.this.listener != null) {
+			if (VSliderPanel.this.listener != null && this.fireToggleEvent) {
 				VSliderPanel.this.listener.onToggle(VSliderPanel.this.expand);
 			}
 		};
@@ -251,8 +261,8 @@ public class VSliderPanel extends SimplePanel {
 		}
 	}
 
-	public void animateTo(final boolean expand, final int duration) {
-		this.slideAnimation.setAnimateToExpand(expand);
+	public void animateTo(final boolean expand, final int duration, final boolean fireToggleEvent) {
+		this.slideAnimation.setAnimateToExpand(expand, fireToggleEvent);
 		this.slideAnimation.run(duration);
 	}
 
@@ -272,12 +282,33 @@ public class VSliderPanel extends SimplePanel {
 
 	private ScheduleTimer scheduleTimer;
 
+	/**
+	 * schedule animation with delay
+	 * 
+	 * @param expand
+	 * @param animated
+	 * @param delayMillis
+	 */
 	public void scheduleExpand(final boolean expand, final boolean animated, final int delayMillis) {
 		if (this.scheduleTimer == null) {
 			this.scheduleTimer = new ScheduleTimer();
 		}
 		this.scheduleTimer.setValues(expand, animated);
 		this.scheduleTimer.schedule(delayMillis);
+	}
+
+	/**
+	 * adds custom styleNames to wrapper
+	 * 
+	 * @param styles
+	 */
+	public void setStyles(final String styles) {
+		this.wrapperNode.setClassName(this.wrapperBaseClassName + styles);
+		this.contentNode.setClassName(VSliderPanel.CLASSNAME + "-content" + styles);
+		this.navigationElem.setClassName(VSliderPanel.CLASSNAME + "-navigator" + styles);
+		this.tabElem.setClassName(this.tabBaseClassName + styles);
+		// to set old open/closed class
+		updateTabElemClassName();
 	}
 
 }

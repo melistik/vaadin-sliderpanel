@@ -22,6 +22,7 @@ import com.vaadin.ui.Component;
 public class SliderPanel extends AbstractSingleComponentContainer {
 
 	private final List<SliderPanelListener> listeners = new ArrayList<SliderPanelListener>();
+	private final SliderMode mode;
 
 	private final SliderPanelServerRpc rpc = new SliderPanelServerRpc() {
 		@Override
@@ -80,20 +81,24 @@ public class SliderPanel extends AbstractSingleComponentContainer {
 	 */
 	public SliderPanel(final Component content, final boolean expanded, final SliderMode mode) {
 		setContent(content);
-
-		if (mode.isVertical()) {
-			setHeight(100, Unit.PERCENTAGE);
-			setWidth(40, Unit.PIXELS);
-		} else {
-			setWidth(100, Unit.PERCENTAGE);
-			setHeight(40, Unit.PIXELS);
-		}
+		this.mode = mode;
+		updateSize();
 
 		setImmediate(true);
 		registerRpc(this.rpc);
 
 		getState().expand = expanded;
 		getState().mode = mode;
+	}
+
+	private void updateSize() {
+		if (this.mode.isVertical()) {
+			setHeight(100, Unit.PERCENTAGE);
+			setWidth(getState().tabSize, Unit.PIXELS);
+		} else {
+			setWidth(100, Unit.PERCENTAGE);
+			setHeight(getState().tabSize, Unit.PIXELS);
+		}
 	}
 
 	/**
@@ -244,4 +249,15 @@ public class SliderPanel extends AbstractSingleComponentContainer {
 		getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(true, true, delayMillis);
 	}
 
+	/**
+	 * allows to change the short width/height of the tab-caption<br>
+	 * you need to change also your css when you change from default value<br>
+	 * default <b>40</b> important <b>need to get setted before first attach!</b>
+	 * 
+	 * @param tabSize
+	 */
+	public void setTabSize(final int tabSize) {
+		getState().tabSize = tabSize;
+		updateSize();
+	}
 }

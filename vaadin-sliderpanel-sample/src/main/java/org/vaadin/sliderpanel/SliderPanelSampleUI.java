@@ -37,11 +37,27 @@ public class SliderPanelSampleUI extends UI {
 		mainLayout.setSpacing(false);
 
 		// top slider
-		final SliderPanel topSlider = new SliderPanel(dummyContent("Top Slider Heading", 3), false, SliderMode.TOP);
-		topSlider.setCaption("Top Slider");
-		topSlider.setTabPosition(SliderTabPosition.BEGINNING);
+		final SliderPanel firstTopSlider = new SliderPanel(dummyContent("First Top Slider Heading", 3), false, SliderMode.TOP);
+		firstTopSlider.setCaption("First Top Slider");
+		firstTopSlider.setTabPosition(SliderTabPosition.MIDDLE);
+		firstTopSlider.addStyleName(SliderPanelStyles.COLOR_WHITE);
 
-		mainLayout.addComponent(topSlider);
+		final SliderPanel secondTopSlider = new SliderPanel(dummyContent("Second Top Slider Heading", 3), false, SliderMode.TOP);
+		secondTopSlider.setCaption("Second Top Slider");
+		secondTopSlider.setTabPosition(SliderTabPosition.MIDDLE);
+		secondTopSlider.addStyleName(SliderPanelStyles.COLOR_GREEN);
+
+		// Two top slider
+		HorizontalLayout topTwoSliderLayout = new HorizontalLayout();
+		topTwoSliderLayout.setWidth(100, Unit.PERCENTAGE);
+		topTwoSliderLayout.setHeight(40, Unit.PIXELS);
+		topTwoSliderLayout.setMargin(false);
+		topTwoSliderLayout.setSpacing(false);
+		topTwoSliderLayout.addComponent(firstTopSlider);
+		topTwoSliderLayout.setExpandRatio(firstTopSlider, 1);
+		topTwoSliderLayout.addComponent(secondTopSlider);
+		topTwoSliderLayout.setExpandRatio(secondTopSlider, 1);
+		mainLayout.addComponent(topTwoSliderLayout);
 
 		// center layout with left and right slider
 		HorizontalLayout contentLayout = new HorizontalLayout();
@@ -52,20 +68,21 @@ public class SliderPanelSampleUI extends UI {
 		VerticalLayout leftDummyContent = dummyContent("Left Slider Heading", 5);
 		leftDummyContent.setWidth(400, Unit.PIXELS);
 		SliderPanel leftSlider = new SliderPanel(leftDummyContent, false, SliderMode.LEFT);
-		leftSlider.setCaption("Left Slider");
+		leftSlider.setCaption("Left slow Slider");
 		leftSlider.setTabPosition(SliderTabPosition.BEGINNING);
+		leftSlider.setAnimationDuration(2000);
 		contentLayout.addComponent(leftSlider);
 
 		// dummy middle content
 		VerticalLayout contentLabel = dummyContent("Main Content", 10);
 		contentLabel.setSizeFull();
 
-		contentLabel.addComponent(new Button("schedule toggle top-slider", new Button.ClickListener() {
+		contentLabel.addComponent(new Button("schedule toggle first-top-slider", new Button.ClickListener() {
 
 			@Override
 			public void buttonClick(final ClickEvent event) {
-				Notification.show("start schedule toggle on top-slider in 2 secs", Type.TRAY_NOTIFICATION);
-				topSlider.scheduleToggle(2000);
+				Notification.show("start schedule toggle on first-top-slider in 2 secs", Type.TRAY_NOTIFICATION);
+				firstTopSlider.scheduleToggle(2000);
 			}
 		}));
 
@@ -84,6 +101,7 @@ public class SliderPanelSampleUI extends UI {
 		SliderPanel rightSlider = new SliderPanel(rightDummyContent, SliderMode.RIGHT);
 		rightSlider.setCaption("Right Slider");
 		rightSlider.setTabPosition(SliderTabPosition.MIDDLE);
+		rightSlider.addStyleName(SliderPanelStyles.COLOR_BLUE);
 		rightSlider.addListener(new SliderPanelListener() {
 			@Override
 			public void onToggle(final boolean expand) {
@@ -99,6 +117,8 @@ public class SliderPanelSampleUI extends UI {
 		// bottom slider
 		SliderPanel bottomSlider = new SliderPanel(dummyContent("Bottom Slider Heading", 5), false, SliderMode.BOTTOM);
 		bottomSlider.setCaption("Bottom Slider");
+		bottomSlider.setTabPosition(SliderTabPosition.END);
+		bottomSlider.addStyleName(SliderPanelStyles.COLOR_RED);
 		mainLayout.addComponent(bottomSlider);
 
 		setContent(mainLayout);

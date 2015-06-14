@@ -10,6 +10,7 @@ import com.vaadin.shared.AbstractComponentState;
  */
 public class SliderPanelState extends AbstractComponentState {
 
+	public int tabSize = 40;
 	public int animationDuration = 500;
 	public boolean expand = false;
 	public SliderMode mode = null;
