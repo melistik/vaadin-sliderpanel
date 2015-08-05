@@ -21,294 +21,319 @@ import com.vaadin.ui.Component;
  */
 public class SliderPanel extends AbstractSingleComponentContainer {
 
-    private static final long serialVersionUID = -700114746583108434L;
+	private static final long serialVersionUID = -700114746583108434L;
 
-    private List<SliderPanelListener> listeners = new ArrayList<SliderPanelListener>();
+	private final List<SliderPanelListener> listeners = new ArrayList<SliderPanelListener>();
 
-    private final SliderPanelServerRpc rpc = new SliderPanelServerRpc() {
+	private final SliderPanelServerRpc rpc = new SliderPanelServerRpc() {
 
-        private static final long serialVersionUID = -7181810258679430654L;
+		private static final long serialVersionUID = -7181810258679430654L;
 
-        @Override
-        public void clicked(final boolean visible) {
-            getState().expand = visible;
-            // fires event on all listeners
-            for (SliderPanelListener listener : SliderPanel.this.listeners) {
-                listener.onToggle(visible);
-            }
-        }
-    };
+		@Override
+		public void clicked(final boolean visible) {
+			getState().expand = visible;
+			// fires event on all listeners
+			for (SliderPanelListener listener : SliderPanel.this.listeners) {
+				listener.onToggle(visible);
+			}
+		}
+	};
 
-    /**
-     * please use {@link SliderPanelBuilder} in 1.3 this will get removed
-     */
-    @Deprecated
-    public SliderPanel(final Component content) {
-        this(new SliderPanelBuilder(content));
-    }
+	/**
+	 * please use {@link SliderPanelBuilder} in 1.3 this will get removed<br>
+	 * expand default <b>false</b><br>
+	 * mode default <b>TOP</b>
+	 * 
+	 * @param content
+	 *            that is wrapped by the SliderPanel
+	 */
+	@Deprecated
+	public SliderPanel(final Component content) {
+		this(new SliderPanelBuilder(content));
+	}
 
-    /**
-     * please use {@link SliderPanelBuilder} in 1.3 this will get removed
-     */
-    @Deprecated
-    public SliderPanel(final Component content, final SliderMode mode) {
-        this(new SliderPanelBuilder(content).mode(mode));
-    }
+	/**
+	 * please use {@link SliderPanelBuilder} in 1.3 this will get removed<br>
+	 * expand default <b>false</b>
+	 * 
+	 * @param content
+	 *            that is wrapped by the SliderPanel
+	 * @param mode
+	 *            default <b>TOP</b>
+	 */
+	@Deprecated
+	public SliderPanel(final Component content, final SliderMode mode) {
+		this(new SliderPanelBuilder(content).mode(mode));
+	}
 
-    /**
-     * please use {@link SliderPanelBuilder} in 1.3 this will get removed
-     */
-    @Deprecated
-    public SliderPanel(final Component content, final boolean expanded) {
-        this(new SliderPanelBuilder(content).expanded(expanded));
-    }
+	/**
+	 * please use {@link SliderPanelBuilder} in 1.3 this will get removed
+	 * 
+	 * @param content
+	 *            that is wrapped by the SliderPanel
+	 * @param expanded
+	 *            default <b>false</b>
+	 */
+	@Deprecated
+	public SliderPanel(final Component content, final boolean expanded) {
+		this(new SliderPanelBuilder(content).expanded(expanded));
+	}
 
-    /**
-     * please use {@link SliderPanelBuilder} in 1.3 this will get removed
-     */
-    @Deprecated
-    public SliderPanel(final Component content, final boolean expanded, final SliderMode mode) {
-        this(new SliderPanelBuilder(content).expanded(expanded).mode(mode));
-    }
+	/**
+	 * please use {@link SliderPanelBuilder} in 1.3 this will get removed
+	 * 
+	 * @param content
+	 *            that is wrapped by the SliderPanel
+	 * @param expanded
+	 *            default <b>false</b>
+	 * @param mode
+	 *            default <b>TOP</b>
+	 */
+	@Deprecated
+	public SliderPanel(final Component content, final boolean expanded, final SliderMode mode) {
+		this(new SliderPanelBuilder(content).expanded(expanded)
+				.mode(mode));
+	}
 
-    /**
-     * {@link SliderPanelBuilder} simplify the configuration of the {@link SliderPanel}<br>
-     * You can write your configuration with the fluent api<br>
-     * Hint: to construct {@link SliderPanel} use {@link SliderPanelBuilder#build()}
-     * 
-     * @param builder
-     * 
-     */
-    public SliderPanel(SliderPanelBuilder builder) {
-        setContent(builder.content);
-        if (builder.mode.isVertical()) {
-            setHeight(100, Unit.PERCENTAGE);
-            setWidth(builder.flowInContent ? 0 : builder.tabSize, Unit.PIXELS);
-        }
-        else {
-            setWidth(100, Unit.PERCENTAGE);
-            setHeight(builder.flowInContent ? 0 : builder.tabSize, Unit.PIXELS);
-        }
-        setImmediate(true);
-        registerRpc(this.rpc);
+	/**
+	 * {@link SliderPanelBuilder} simplify the configuration of the {@link SliderPanel}<br>
+	 * You can write your configuration with the fluent api<br>
+	 * Hint: to construct {@link SliderPanel} use {@link SliderPanelBuilder#build()}
+	 * 
+	 * @param builder
+	 *            instance of the builder. normally create instance via {@link SliderPanelBuilder#build()}
+	 */
+	public SliderPanel(final SliderPanelBuilder builder) {
+		setContent(builder.content);
+		if (builder.mode.isVertical()) {
+			setHeight(100, Unit.PERCENTAGE);
+			setWidth(builder.flowInContent ? 0 : builder.tabSize, Unit.PIXELS);
+		} else {
+			setWidth(100, Unit.PERCENTAGE);
+			setHeight(builder.flowInContent ? 0 : builder.tabSize, Unit.PIXELS);
+		}
+		setImmediate(true);
+		registerRpc(this.rpc);
 
-        getState().pixel = builder.pixel;
-        getState().expand = builder.expanded;
-        getState().mode = builder.mode;
-        getState().tabSize = builder.tabSize;
-        getState().flowInContent = builder.flowInContent;
-        getState().tabPosition = builder.tabPosition;
-        getState().animationDuration = builder.animationDuration;
+		getState().pixel = builder.pixel;
+		getState().expand = builder.expanded;
+		getState().mode = builder.mode;
+		getState().tabSize = builder.tabSize;
+		getState().flowInContent = builder.flowInContent;
+		getState().tabPosition = builder.tabPosition;
+		getState().animationDuration = builder.animationDuration;
 
-        if (builder.caption != null) {
-            getState().caption = builder.caption;
-        }
-        if (builder.listeners != null) {
-            listeners.addAll(builder.listeners);
-        }
-        if (builder.styles != null) {
-            for (String style : builder.styles) {
-                addStyleName(style);
-            }
-        }
-    }
+		if (builder.caption != null) {
+			getState().caption = builder.caption;
+		}
+		if (builder.listeners != null) {
+			this.listeners.addAll(builder.listeners);
+		}
+		if (builder.styles != null) {
+			for (String style : builder.styles) {
+				addStyleName(style);
+			}
+		}
+	}
 
-    /**
-     * add listener on slider interactions
-     * 
-     * @param listener
-     */
-    public void addListener(final SliderPanelListener listener) {
-        this.listeners.add(listener);
-    }
+	/**
+	 * add listener on slider interactions
+	 * 
+	 * @param listener
+	 *            class that implements {@link SliderPanelListener}
+	 */
+	public void addListener(final SliderPanelListener listener) {
+		this.listeners.add(listener);
+	}
 
-    /**
-     * remove listener on slider interactions
-     * 
-     * @param listener
-     * @return true when removed successfully
-     */
-    public boolean removeListener(final SliderPanelListener listener) {
-        return this.listeners.remove(listener);
-    }
+	/**
+	 * remove listener on slider interactions
+	 * 
+	 * @param listener
+	 *            {@link SliderPanelListener} that should ge removed
+	 * @return true when removed successfully
+	 */
+	public boolean removeListener(final SliderPanelListener listener) {
+		return this.listeners.remove(listener);
+	}
 
-    /**
-     * Caption of the tab escape HTML
-     */
-    @Override
-    public void setCaption(final String caption) {
-        getState().caption = caption;
-    }
+	/**
+	 * Caption of the tab escape HTML
+	 */
+	@Override
+	public void setCaption(final String caption) {
+		getState().caption = caption;
+	}
 
-    /**
-     * controls the position of the tab-panel<br>
-     * by default BEGINNING
-     * 
-     * @param tabPosition
-     */
-    public void setTabPosition(final SliderTabPosition tabPosition) {
-        getState().tabPosition = tabPosition;
-    }
+	/**
+	 * controls the position of the tab-panel<br>
+	 * 
+	 * @param tabPosition
+	 *            by default BEGINNING
+	 */
+	public void setTabPosition(final SliderTabPosition tabPosition) {
+		getState().tabPosition = tabPosition;
+	}
 
-    /**
-     * explicitly map the custom state object to the server implementation
-     *
-     * @return
-     */
-    @Override
-    protected SliderPanelState getState() {
-        return (SliderPanelState) super.getState();
-    }
+	/**
+	 * explicitly map the custom state object to the server implementation
+	 *
+	 * @return current SliderPanelState
+	 */
+	@Override
+	protected SliderPanelState getState() {
+		return (SliderPanelState) super.getState();
+	}
 
-    /**
-     * @return duration in milliseconds
-     */
-    public int getAnimationDuration() {
-        return getState().animationDuration;
-    }
+	/**
+	 * @return duration in milliseconds
+	 */
+	public int getAnimationDuration() {
+		return getState().animationDuration;
+	}
 
-    /**
-     * set the animation duration<br>
-     * by default 500ms
-     * 
-     * @param animationDuration
-     *            in milliseconds
-     */
-    public void setAnimationDuration(final int animationDuration) {
-        getState().animationDuration = animationDuration;
-    }
+	/**
+	 * set the animation duration<br>
+	 * by default 500ms
+	 * 
+	 * @param animationDuration
+	 *            in milliseconds
+	 */
+	public void setAnimationDuration(final int animationDuration) {
+		getState().animationDuration = animationDuration;
+	}
 
-    /**
-     * by default the {@link SliderPanel} calculates it's content width/height (depending on it's mode)<br>
-     * in some cases it's useful to programmatically set this value
-     * 
-     * @param pixel
-     *            width/height (depending on it's mode)
-     */
-    public void setFixedContentSize(int pixel) {
-        getState().pixel = pixel;
-    }
+	/**
+	 * by default the {@link SliderPanel} calculates it's content width/height (depending on it's mode)<br>
+	 * in some cases it's useful to programmatically set this value
+	 * 
+	 * @param pixel
+	 *            width/height (depending on it's mode)
+	 */
+	public void setFixedContentSize(final int pixel) {
+		getState().pixel = pixel;
+	}
 
-    /**
-     * change to value when not already set
-     * 
-     * @param value
-     *            true means expand
-     * @param animated
-     *            should be animated or not
-     */
-    public void setExpanded(final boolean value, final boolean animated) {
-        getRpcProxy(SliderPanelClientRpc.class).setExpand(value, animated);
-    }
+	/**
+	 * change to value when not already set
+	 * 
+	 * @param value
+	 *            true means expand
+	 * @param animated
+	 *            should be animated or not
+	 */
+	public void setExpanded(final boolean value, final boolean animated) {
+		getRpcProxy(SliderPanelClientRpc.class).setExpand(value, animated);
+	}
 
-    /**
-     * change from expand to collapsed...
-     */
-    public void toogle() {
-        getRpcProxy(SliderPanelClientRpc.class).setExpand(!getState().expand, true);
-    }
+	/**
+	 * change from expand to collapsed...
+	 */
+	public void toogle() {
+		getRpcProxy(SliderPanelClientRpc.class).setExpand(!getState().expand, true);
+	}
 
-    /**
-     * collapse with animation<br>
-     * when not animation is wished use {@link #setExpanded(boolean, boolean)}
-     */
-    public void collapse() {
-        getRpcProxy(SliderPanelClientRpc.class).setExpand(false, true);
-    }
+	/**
+	 * collapse with animation<br>
+	 * when not animation is wished use {@link #setExpanded(boolean, boolean)}
+	 */
+	public void collapse() {
+		getRpcProxy(SliderPanelClientRpc.class).setExpand(false, true);
+	}
 
-    /**
-     * expand with animation<br>
-     * when not animation is wished use {@link #setExpanded(boolean, boolean)}
-     */
-    public void expand() {
-        getRpcProxy(SliderPanelClientRpc.class).setExpand(true, true);
-    }
+	/**
+	 * expand with animation<br>
+	 * when not animation is wished use {@link #setExpanded(boolean, boolean)}
+	 */
+	public void expand() {
+		getRpcProxy(SliderPanelClientRpc.class).setExpand(true, true);
+	}
 
-    /**
-     * schedule a state change of the slider on client site<br>
-     * a recall within the schedule will cancel the previous one
-     * 
-     * @param value
-     *            true means expand
-     * @param animated
-     *            should be animated or not
-     * @param delayMillis
-     *            millis in future the task will happen
-     */
-    public void scheduleExpand(final boolean value, final boolean animated, final int delayMillis) {
-        getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(value, animated, delayMillis);
-    }
+	/**
+	 * schedule a state change of the slider on client site<br>
+	 * a recall within the schedule will cancel the previous one
+	 * 
+	 * @param value
+	 *            true means expand
+	 * @param animated
+	 *            should be animated or not
+	 * @param delayMillis
+	 *            millis in future the task will happen
+	 */
+	public void scheduleExpand(final boolean value, final boolean animated, final int delayMillis) {
+		getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(value, animated, delayMillis);
+	}
 
-    /**
-     * schedule a change from expand to collapse vice versa in future. will trigger a timer on client site that will
-     * change the slider state<br>
-     * a recall within the schedule will cancel the previous one
-     * 
-     * @param delayMillis
-     *            millis in future the task will happen
-     */
-    public void scheduleToggle(final int delayMillis) {
-        getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(!getState().expand, true, delayMillis);
-    }
+	/**
+	 * schedule a change from expand to collapse vice versa in future. will trigger a timer on client site that will change the slider state
+	 * <br>
+	 * a recall within the schedule will cancel the previous one
+	 * 
+	 * @param delayMillis
+	 *            millis in future the task will happen
+	 */
+	public void scheduleToggle(final int delayMillis) {
+		getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(!getState().expand, true, delayMillis);
+	}
 
-    /**
-     * schedule a collapse in future. will trigger a timer on client site that will collapse the slider<br>
-     * a recall within the schedule will cancel the previous one
-     * 
-     * @param delayMillis
-     *            millis in future the task will happen
-     */
-    public void scheduleCollapse(final int delayMillis) {
-        getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(false, true, delayMillis);
-    }
+	/**
+	 * schedule a collapse in future. will trigger a timer on client site that will collapse the slider<br>
+	 * a recall within the schedule will cancel the previous one
+	 * 
+	 * @param delayMillis
+	 *            millis in future the task will happen
+	 */
+	public void scheduleCollapse(final int delayMillis) {
+		getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(false, true, delayMillis);
+	}
 
-    /**
-     * schedule an expand in future. will trigger a timer on client site that will expand the slider<br>
-     * a recall within the schedule will cancel the previous one
-     * 
-     * @param delayMillis
-     *            millis in future the task will happen
-     */
-    public void scheduleExpand(final int delayMillis) {
-        getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(true, true, delayMillis);
-    }
+	/**
+	 * schedule an expand in future. will trigger a timer on client site that will expand the slider<br>
+	 * a recall within the schedule will cancel the previous one
+	 * 
+	 * @param delayMillis
+	 *            millis in future the task will happen
+	 */
+	public void scheduleExpand(final int delayMillis) {
+		getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(true, true, delayMillis);
+	}
 
-    /**
-     * width/height will get managed internally<br>
-     * to fix conent's height/width please use {@link SliderPanelBuilder.fixedContentSize}
-     */
-    @Deprecated
-    @Override
-    public void setWidth(String width) {
-        super.setWidth(width);
-    }
+	/**
+	 * width/height will get managed internally<br>
+	 * to fix conent's height/width please use {@link SliderPanelBuilder#fixedContentSize(int)}
+	 */
+	@Deprecated
+	@Override
+	public void setWidth(final String width) {
+		super.setWidth(width);
+	}
 
-    /**
-     * @see {@link #setWidth(String)}
-     */
-    @Deprecated
-    @Override
-    public void setWidth(float width, Unit unit) {
-        super.setWidth(width, unit);
-    }
+	/**
+	 * look {@link #setWidth(String)}
+	 */
+	@Deprecated
+	@Override
+	public void setWidth(final float width, final Unit unit) {
+		super.setWidth(width, unit);
+	}
 
-    /**
-     * width/height will get managed internally<br>
-     * to fix conent's height/width please use {@link SliderPanelBuilder#flowInContent(boolean)}
-     */
-    @Deprecated
-    @Override
-    public void setHeight(String height) {
-        super.setHeight(height);
-    }
+	/**
+	 * width/height will get managed internally<br>
+	 * to fix conent's height/width please use {@link SliderPanelBuilder#fixedContentSize(int)}
+	 */
+	@Deprecated
+	@Override
+	public void setHeight(final String height) {
+		super.setHeight(height);
+	}
 
-    /**
-     * @see {@link #setHeight(String)}
-     */
-    @Deprecated
-    @Override
-    public void setHeight(float height, Unit unit) {
-        super.setHeight(height, unit);
-    }
+	/**
+	 * look {@link #setHeight(String)}
+	 */
+	@Deprecated
+	@Override
+	public void setHeight(final float height, final Unit unit) {
+		super.setHeight(height, unit);
+	}
 
 }
