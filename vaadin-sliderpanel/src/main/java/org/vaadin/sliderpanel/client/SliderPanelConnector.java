@@ -20,87 +20,92 @@ import com.vaadin.shared.ui.Connect;
 @Connect(SliderPanel.class)
 public class SliderPanelConnector extends AbstractSingleComponentContainerConnector implements SimpleManagedLayout {
 
-	SliderPanelServerRpc rpc = RpcProxy.create(SliderPanelServerRpc.class, this);
+    private static final long serialVersionUID = 8211838780745411232L;
 
-	public SliderPanelConnector() {
-		super();
+    SliderPanelServerRpc rpc = RpcProxy.create(SliderPanelServerRpc.class, this);
 
-		getWidget().setToggleListener(new SliderPanelListener() {
+    public SliderPanelConnector() {
+        super();
 
-			@Override
-			public void onToggle(final boolean expanded) {
-				SliderPanelConnector.this.rpc.clicked(expanded);
-			}
-		});
+        getWidget().setToggleListener(new SliderPanelListener() {
 
-		registerRpc(SliderPanelClientRpc.class, new SliderPanelClientRpc() {
-			@Override
-			public void setExpand(final boolean expand, final boolean animated) {
-				getWidget().setExpand(expand, animated);
-			}
+            @Override
+            public void onToggle(final boolean expanded) {
+                SliderPanelConnector.this.rpc.clicked(expanded);
+            }
+        });
 
-			@Override
-			public void scheduleExpand(final boolean expand, final boolean animated, final int delayMillis) {
-				getWidget().scheduleExpand(expand, animated, delayMillis);
-			}
-		});
+        registerRpc(SliderPanelClientRpc.class, new SliderPanelClientRpc() {
 
-	}
+            private static final long serialVersionUID = -4626540340348038160L;
 
-	@Override
-	public SliderPanelState getState() {
-		return (SliderPanelState) super.getState();
-	}
+            @Override
+            public void setExpand(final boolean expand, final boolean animated) {
+                getWidget().setExpand(expand, animated);
+            }
 
-	@Override
-	public VSliderPanel getWidget() {
-		return (VSliderPanel) super.getWidget();
-	}
+            @Override
+            public void scheduleExpand(final boolean expand, final boolean animated, final int delayMillis) {
+                getWidget().scheduleExpand(expand, animated, delayMillis);
+            }
+        });
 
-	@Override
-	public void updateCaption(final ComponentConnector connector) {
-	}
+    }
 
-	@Override
-	public void onConnectorHierarchyChange(final ConnectorHierarchyChangeEvent event) {
-		getWidget().setWidget(getContentWidget());
-	}
+    @Override
+    public SliderPanelState getState() {
+        return (SliderPanelState) super.getState();
+    }
 
-	@Override
-	public void onStateChanged(final StateChangeEvent stateChangeEvent) {
-		super.onStateChanged(stateChangeEvent);
+    @Override
+    public VSliderPanel getWidget() {
+        return (VSliderPanel) super.getWidget();
+    }
 
-		if (stateChangeEvent.hasPropertyChanged("animationDuration")) {
-			getWidget().setAnimationDuration(getState().animationDuration);
-		}
-		if (stateChangeEvent.hasPropertyChanged("caption")) {
-			getWidget().setCaption(getState().caption, false);
-		}
-		if (stateChangeEvent.hasPropertyChanged("mode")) {
-			getWidget().setMode(getState().mode);
-		}
-		if (stateChangeEvent.hasPropertyChanged("tabPosition")) {
-			getWidget().setTabPosition(getState().tabPosition);
-		}
-		if (ComponentStateUtil.hasStyles(getState())) {
-			String extraStyles = "";
-			for (String style : getState().styles) {
-				extraStyles += " " + style;
-			}
-			getWidget().setStyles(extraStyles);
-		}
-	}
+    @Override
+    public void updateCaption(final ComponentConnector connector) {
+    }
 
-	@Override
-	public boolean delegateCaptionHandling() {
-		return false;
-	}
+    @Override
+    public void onConnectorHierarchyChange(final ConnectorHierarchyChangeEvent event) {
+        getWidget().setWidget(getContentWidget());
+    }
 
-	@Override
-	public void layout() {
-		// in case onStateChanged is not fired before
-		getWidget().setMode(getState().mode);
-		getWidget().initialize(getState().expand, getState().tabSize);
-	}
+    @Override
+    public void onStateChanged(final StateChangeEvent stateChangeEvent) {
+        super.onStateChanged(stateChangeEvent);
+
+        getWidget().configure(getState().mode, getState().flowInContent, getState().tabPosition, getState().pixel);
+
+        if (stateChangeEvent.hasPropertyChanged("animationDuration")) {
+            getWidget().setAnimationDuration(getState().animationDuration);
+        }
+        if (stateChangeEvent.hasPropertyChanged("caption")) {
+            getWidget().setCaption(getState().caption, false);
+        }
+        if (stateChangeEvent.hasPropertyChanged("pixel")) {
+            getWidget().setFixedContentSize(getState().pixel);
+        }
+
+        if (ComponentStateUtil.hasStyles(getState())) {
+            String extraStyles = "";
+            for (String style : getState().styles) {
+                extraStyles += " " + style;
+            }
+            getWidget().setStyles(extraStyles);
+        }
+    }
+
+    @Override
+    public boolean delegateCaptionHandling() {
+        return false;
+    }
+
+    @Override
+    public void layout() {
+        // in case onStateChanged is not fired before
+        getWidget().configure(getState().mode, getState().flowInContent, getState().tabPosition, getState().pixel);
+        getWidget().initialize(getState().expand, getState().tabSize);
+    }
 
 }

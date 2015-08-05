@@ -10,9 +10,14 @@ import com.vaadin.shared.AbstractComponentState;
  */
 public class SliderPanelState extends AbstractComponentState {
 
-	public int tabSize = 40;
+    private static final long serialVersionUID = -8569926476346984749L;
+
+    public int tabSize = 40;
 	public int animationDuration = 500;
 	public boolean expand = false;
 	public SliderMode mode = null;
 	public SliderTabPosition tabPosition = SliderTabPosition.BEGINNING;
+
+    public boolean flowInContent = false;
+    public int pixel = -1;
 }
