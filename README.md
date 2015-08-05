@@ -5,6 +5,21 @@ Panel that is able to get collapsed and expand. The expand mode lays over the co
 
 ![showcase](assets/showcase.gif)
 
+Main Features
+========
+
+* pur css design
+* nice collapse/expand animation
+* Listener for collapsed/expanded
+* schedule future collapse/expand on client side
+* customizable:
+  * 4 different display modes
+  * 3 different tab position
+  * easy to change color and style by css
+  * 5 pre designed colors (by *SliderPanelStyles*)
+  * SliderNavigation element can flow within underlaying content or not
+  * configure custom TabSize (need to change css as well!)
+
 
 Workflow
 ========
@@ -45,6 +60,18 @@ firstTopSlider.addStyleName(SliderPanelStyles.COLOR_WHITE);
 ```
 
 The class **SliderPanelStyles** holds the style options. Further more you can place your custom StyleName in the same way...
+
+Version 1.2.x introduced a fluent builder to configure SliderPanel:
+
+```java
+SliderPanel sliderPanel = new SliderPanelBuilder(dummyContent("White Slider", 3))
+  .caption("White Slider")
+  .mode(SliderMode.TOP)
+  .tabPosition(SliderTabPosition.MIDDLE)
+  .style(SliderPanelStyles.COLOR_WHITE)
+  .build();
+```
+
 
 Details to the addon you can find on [Vaadin](https://vaadin.com/directory#addon/sliderpanel)
 
