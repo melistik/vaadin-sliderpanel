@@ -10,6 +10,7 @@ import org.vaadin.sliderpanel.client.SliderTabPosition;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -26,131 +27,132 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("valo")
 public class SliderPanelSampleUI extends UI {
 
-	private static final String LOREM_IPSUM = "Lorem ipsum dolor sit amet,consetetur sadipscing elitr, "
-			+ "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.";
+    private static final String LOREM_IPSUM = "Lorem ipsum dolor sit amet,consetetur sadipscing elitr, "
+        + "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.";
 
-	@Override
-	protected void init(final VaadinRequest vaadinRequest) {
-		final VerticalLayout mainLayout = new VerticalLayout();
-		mainLayout.setSizeFull();
-		mainLayout.setMargin(false);
-		mainLayout.setSpacing(false);
+    @Override
+    protected void init(final VaadinRequest vaadinRequest) {
+        final VerticalLayout mainLayout = new VerticalLayout();
+        mainLayout.setSizeFull();
+        mainLayout.setMargin(false);
+        mainLayout.setSpacing(false);
 
-		// top slider
-		final SliderPanel firstTopSlider = new SliderPanel(dummyContent("First Top Slider Heading", 3), false, SliderMode.TOP);
-		firstTopSlider.setCaption("First Top Slider");
-		firstTopSlider.setTabPosition(SliderTabPosition.MIDDLE);
-		firstTopSlider.addStyleName(SliderPanelStyles.COLOR_WHITE);
+        // top slider
 
-		final SliderPanel secondTopSlider = new SliderPanel(dummyContent("Second Top Slider Heading", 3), false, SliderMode.TOP);
-		secondTopSlider.setCaption("Second Top Slider");
-		secondTopSlider.setTabPosition(SliderTabPosition.MIDDLE);
-		secondTopSlider.addStyleName(SliderPanelStyles.COLOR_GREEN);
+        final SliderPanel firstTopSlider =
+            new SliderPanelBuilder(dummyContent("First Top Slider Heading", 1), "First Top Slider")
+                .tabPosition(SliderTabPosition.MIDDLE).style(SliderPanelStyles.COLOR_WHITE).build();
 
-		// Two top slider
-		HorizontalLayout topTwoSliderLayout = new HorizontalLayout();
-		topTwoSliderLayout.setWidth(100, Unit.PERCENTAGE);
-		topTwoSliderLayout.setHeight(40, Unit.PIXELS);
-		topTwoSliderLayout.setMargin(false);
-		topTwoSliderLayout.setSpacing(false);
-		topTwoSliderLayout.addComponent(firstTopSlider);
-		topTwoSliderLayout.setExpandRatio(firstTopSlider, 1);
-		topTwoSliderLayout.addComponent(secondTopSlider);
-		topTwoSliderLayout.setExpandRatio(secondTopSlider, 1);
-		mainLayout.addComponent(topTwoSliderLayout);
+        final SliderPanel secondTopSlider =
+            new SliderPanelBuilder(dummyContent("Second Top Slider Heading", 1), "Second Top Slider fixedContentSize")
+                .tabPosition(SliderTabPosition.MIDDLE).style(SliderPanelStyles.COLOR_GREEN)
+                .fixedContentSize(Page.getCurrent().getBrowserWindowHeight() - 100).build();
 
-		// center layout with left and right slider
-		HorizontalLayout contentLayout = new HorizontalLayout();
-		contentLayout.setSpacing(true);
-		contentLayout.setSizeFull();
+        // Two top slider
+        HorizontalLayout topTwoSliderLayout = new HorizontalLayout();
+        topTwoSliderLayout.setWidth(100, Unit.PERCENTAGE);
+        topTwoSliderLayout.setHeight(40, Unit.PIXELS);
+        topTwoSliderLayout.setMargin(false);
+        topTwoSliderLayout.setSpacing(false);
+        topTwoSliderLayout.addComponent(firstTopSlider);
+        topTwoSliderLayout.setExpandRatio(firstTopSlider, 1);
+        topTwoSliderLayout.addComponent(secondTopSlider);
+        topTwoSliderLayout.setExpandRatio(secondTopSlider, 1);
+        mainLayout.addComponent(topTwoSliderLayout);
 
-		// left slider
-		VerticalLayout leftDummyContent = dummyContent("Left Slider Heading", 5);
-		leftDummyContent.setWidth(400, Unit.PIXELS);
-		SliderPanel leftSlider = new SliderPanel(leftDummyContent, false, SliderMode.LEFT);
-		leftSlider.setCaption("Left slow Slider");
-		leftSlider.setTabPosition(SliderTabPosition.BEGINNING);
-		leftSlider.setAnimationDuration(2000);
-		contentLayout.addComponent(leftSlider);
+        // center layout with left and right slider
+        HorizontalLayout contentLayout = new HorizontalLayout();
+        contentLayout.setSpacing(false);
+        contentLayout.setSizeFull();
 
-		// dummy middle content
-		VerticalLayout contentLabel = dummyContent("Main Content", 10);
-		contentLabel.setSizeFull();
+        // left slider
+        VerticalLayout leftDummyContent = dummyContent("Left Slider Heading", 3);
+        leftDummyContent.setWidth(400, Unit.PIXELS);
+        SliderPanel leftSlider =
+            new SliderPanelBuilder(leftDummyContent, "Left slow Slider (flow in Content)").mode(SliderMode.LEFT)
+                .tabPosition(SliderTabPosition.BEGINNING)
+                .animationDuration(2000).flowInContent(true).build();
+        contentLayout.addComponent(leftSlider);
 
-		contentLabel.addComponent(new Button("schedule toggle first-top-slider", new Button.ClickListener() {
+        // dummy middle content
+        VerticalLayout contentLabel = dummyContent("Main Content", 10);
+        contentLabel.setSizeFull();
+        contentLabel.setMargin(false);
 
-			@Override
-			public void buttonClick(final ClickEvent event) {
-				Notification.show("start schedule toggle on first-top-slider in 2 secs", Type.TRAY_NOTIFICATION);
-				firstTopSlider.scheduleToggle(2000);
-			}
-		}));
+        contentLabel.addComponent(new Button("schedule toggle first-top-slider", new Button.ClickListener() {
 
-		final Label listenerLabel = new Label("event-listener for right-slider", ContentMode.HTML);
-		listenerLabel.setWidth(100, Unit.PERCENTAGE);
-		listenerLabel.setHeight(45, Unit.PIXELS);
-		contentLabel.addComponent(listenerLabel);
+            @Override
+            public void buttonClick(final ClickEvent event) {
+                Notification.show("start schedule toggle on first-top-slider in 2 secs", Type.TRAY_NOTIFICATION);
+                firstTopSlider.scheduleToggle(2000);
+            }
+        }));
 
-		contentLayout.addComponent(contentLabel);
-		contentLayout.setComponentAlignment(contentLabel, Alignment.MIDDLE_CENTER);
-		contentLayout.setExpandRatio(contentLabel, 1);
+        final Label listenerLabel = new Label("event-listener for right-slider", ContentMode.HTML);
+        listenerLabel.setWidth(100, Unit.PERCENTAGE);
+        listenerLabel.setHeight(45, Unit.PIXELS);
+        contentLabel.addComponent(listenerLabel);
 
-		// right slider
-		VerticalLayout rightDummyContent = dummyContent("Right Slider Heading", 3);
-		rightDummyContent.setWidth(300, Unit.PIXELS);
-		SliderPanel rightSlider = new SliderPanel(rightDummyContent, SliderMode.RIGHT);
-		rightSlider.setCaption("Right Slider");
-		rightSlider.setTabPosition(SliderTabPosition.MIDDLE);
-		rightSlider.addStyleName(SliderPanelStyles.COLOR_BLUE);
-		rightSlider.addListener(new SliderPanelListener() {
-			@Override
-			public void onToggle(final boolean expand) {
-				listenerLabel.setValue("event-listener for right-slider: <b>" + (expand ? "expand" : "collapsed") + "</b> by: " + new Date().toString());
-			}
-		});
-		contentLayout.addComponent(rightSlider);
+        contentLayout.addComponent(contentLabel);
+        contentLayout.setComponentAlignment(contentLabel, Alignment.MIDDLE_CENTER);
+        contentLayout.setExpandRatio(contentLabel, 1);
 
-		// fit full screen
-		mainLayout.addComponent(contentLayout);
-		mainLayout.setExpandRatio(contentLayout, 1);
+        // right slider
+        VerticalLayout rightDummyContent = dummyContent("Right Slider Heading", 2);
+        rightDummyContent.setWidth(300, Unit.PIXELS);
+        SliderPanel rightSlider =
+            new SliderPanelBuilder(rightDummyContent, "Right Slider").mode(SliderMode.RIGHT).tabPosition(SliderTabPosition.MIDDLE)
+                .flowInContent(true)
+                .style(SliderPanelStyles.COLOR_BLUE)
+                .listener(new SliderPanelListener() {
+                    @Override
+                    public void onToggle(final boolean expand) {
+                        listenerLabel.setValue("event-listener for right-slider: <b>" + (expand ? "expand" : "collapsed") + "</b> by: "
+                            + new Date().toString());
+                    }
+                }).build();
+        contentLayout.addComponent(rightSlider);
 
-		// bottom slider
-		SliderPanel bottomSlider = new SliderPanel(dummyContent("Bottom Slider Heading", 5), false, SliderMode.BOTTOM);
-		bottomSlider.setCaption("Bottom Slider");
-		bottomSlider.setTabPosition(SliderTabPosition.END);
-		bottomSlider.addStyleName(SliderPanelStyles.COLOR_RED);
-		mainLayout.addComponent(bottomSlider);
+        // fit full screen
+        mainLayout.addComponent(contentLayout);
+        mainLayout.setExpandRatio(contentLayout, 1);
 
-		setContent(mainLayout);
-	}
+        // bottom slider
+        SliderPanel bottomSlider =
+            new SliderPanelBuilder(dummyContent("Bottom Slider Heading", 5), "Bottom Slider").mode(SliderMode.BOTTOM)
+                .tabPosition(SliderTabPosition.END).style(SliderPanelStyles.COLOR_RED).build();
+        mainLayout.addComponent(bottomSlider);
 
-	private VerticalLayout dummyContent(final String title, final int length) {
-		String text = "";
-		for (int x = 0; x <= length; x++) {
-			text += LOREM_IPSUM + " ";
-		}
-		Label htmlDummy = new Label(String.format("<h3>%s</h3>%s", title, text.trim()), ContentMode.HTML);
-		VerticalLayout component = new VerticalLayout(htmlDummy);
-		component.setExpandRatio(htmlDummy, 1);
-		component.addComponent(new Button(title, new Button.ClickListener() {
-			@Override
-			public void buttonClick(final ClickEvent event) {
-				Notification.show("clicked: " + title, Type.HUMANIZED_MESSAGE);
-			}
-		}));
-		component.setMargin(true);
-		component.setSpacing(true);
-		return component;
-	}
+        setContent(mainLayout);
+    }
 
-	@WebServlet(
-			urlPatterns = "/*",
-			name = "SliderPanelSampleUIServlet",
-			asyncSupported = true)
-	@VaadinServletConfiguration(
-			ui = org.vaadin.sliderpanel.SliderPanelSampleUI.class,
-			productionMode = false,
-			widgetset = "org.vaadin.slidersample.WidgetSet")
-	public static class MyUIServlet extends VaadinServlet {
-	}
+    private VerticalLayout dummyContent(final String title, final int length) {
+        String text = "";
+        for (int x = 0; x <= length; x++) {
+            text += LOREM_IPSUM + " ";
+        }
+        Label htmlDummy = new Label(String.format("<h3>%s</h3>%s", title, text.trim()), ContentMode.HTML);
+        VerticalLayout component = new VerticalLayout(htmlDummy);
+        component.setExpandRatio(htmlDummy, 1);
+        component.addComponent(new Button(title, new Button.ClickListener() {
+            @Override
+            public void buttonClick(final ClickEvent event) {
+                Notification.show("clicked: " + title, Type.HUMANIZED_MESSAGE);
+            }
+        }));
+        component.setMargin(true);
+        component.setSpacing(true);
+        return component;
+    }
+
+    @WebServlet(
+        urlPatterns = "/*",
+        name = "SliderPanelSampleUIServlet",
+        asyncSupported = true)
+    @VaadinServletConfiguration(
+        ui = org.vaadin.sliderpanel.SliderPanelSampleUI.class,
+        productionMode = false,
+        widgetset = "org.vaadin.slidersample.WidgetSet")
+    public static class MyUIServlet extends VaadinServlet {
+    }
 }
