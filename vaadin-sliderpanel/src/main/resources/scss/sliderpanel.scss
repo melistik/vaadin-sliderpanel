@@ -152,14 +152,14 @@ $tab-caption-size-v: 210;
 
   &.open {
     .v-sliderpanel-icon:before {
-      content: "\f055";
+      content: "\f056";
       color: white;
     }
   }
 
   &.closed {
     .v-sliderpanel-icon:before {
-      content: "\f056";
+      content: "\f055";
       color: white;
     }
   }
@@ -194,14 +194,14 @@ $tab-caption-size-v: 210;
 @mixin blackico {
   &.open {
     .v-sliderpanel-icon:before {
-      content: "\f055";
+      content: "\f056";
       color: black;
     }
   }
 
   &.closed {
     .v-sliderpanel-icon:before {
-      content: "\f056";
+      content: "\f055";
       color: black;
     }
   }
