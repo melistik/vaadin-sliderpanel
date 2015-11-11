@@ -17,6 +17,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -98,8 +99,14 @@ public class SliderPanelSampleUI extends UI {
         contentLayout.setExpandRatio(contentLabel, 1);
 
         // right slider
-        VerticalLayout rightDummyContent = dummyContent("Right Slider Heading", 2);
-        rightDummyContent.setWidth(300, Unit.PIXELS);
+        VerticalLayout rightDummyContent = dummyContent("Right Slider Heading", 1);
+        rightDummyContent.setWidth(400, Unit.PIXELS);
+        
+        ComboBox simpleCombo = new ComboBox("Combo");
+        simpleCombo.addItems(SliderMode.values());
+        rightDummyContent.addComponent(simpleCombo);
+        rightDummyContent.addComponent(new Label("vaadin's combo creates an inner popup that is also get catched by autoCollapse detection"));
+        
         SliderPanel rightSlider =
             new SliderPanelBuilder(rightDummyContent, "Right Slider (autoCollapse)").mode(SliderMode.RIGHT).tabPosition(SliderTabPosition.MIDDLE)
                 .flowInContent(true)

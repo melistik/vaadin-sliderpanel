@@ -403,6 +403,12 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
         updateTabElemClassName();
     }
 
+    /**
+     * checks whether the event comes from an element within the slider dom tree
+     * 
+     * @param event NativeEvent
+     * @return true when events comes from within
+     */
     private boolean eventTargetsPopup(NativeEvent event) {
         EventTarget target = event.getEventTarget();
         if (Element.is(target)) {
@@ -411,20 +417,43 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
         return false;
     }
 
+    /**
+     * checks whether the event come's from a elements that lays visually within the slider<br>
+     * it doesn't lay directly in the dom tree - for example dropdown popups
+     * 
+     * @param event NativeEvent
+     * @return true when events comes from within
+     */
+    private boolean eventTargetsInnerElementsPopover(NativeEvent event) {
+        EventTarget target = event.getEventTarget();
+        if (Element.is(target)) {
+            Element targetElement = Element.as(target);
+
+            int absoluteLeft = targetElement.getAbsoluteLeft();
+            int absoluteTop = targetElement.getAbsoluteTop();
+            
+            return contentNode.getAbsoluteLeft() <= absoluteLeft && contentNode.getAbsoluteRight() >= absoluteLeft && contentNode.getAbsoluteTop() <= absoluteTop
+                    && contentNode.getAbsoluteBottom() >= absoluteTop;
+        }
+        return false;
+    }
+
     @Override
     public void onPreviewNativeEvent(NativePreviewEvent event) {
         if (autoCollapseSlider && event != null && !event.isCanceled() && expand) {
-            // If the event targets the popup or the partner, consume it
             Event nativeEvent = Event.as(event.getNativeEvent());
-            if (eventTargetsPopup(nativeEvent)) {
-                return;
-            }
 
-            int type = nativeEvent.getTypeInt();
-            switch (type) {
+            switch (nativeEvent.getTypeInt()) {
                 case Event.ONMOUSEDOWN:
                 case Event.ONTOUCHSTART:
                 case Event.ONDBLCLICK:
+
+                    if (eventTargetsPopup(nativeEvent)) {
+                        return;
+                    }
+                    if (eventTargetsInnerElementsPopover(nativeEvent)) {
+                        return;
+                    }
                     setExpand(false, true);
             }
         }
