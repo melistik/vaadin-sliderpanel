@@ -231,7 +231,7 @@ public class SliderPanel extends AbstractSingleComponentContainer {
      * returns the current state of {@link SliderPanel}<br>
      * it look only on state - a possible queued change is not checked 
      * 
-     * @return
+     * @return is expanded
      */
     public boolean isExpanded() {
         return getState().expand;

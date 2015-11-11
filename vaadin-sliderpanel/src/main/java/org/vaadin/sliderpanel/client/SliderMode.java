@@ -34,7 +34,7 @@ public enum SliderMode {
 	/**
 	 * layout is vertical
 	 * 
-	 * @return
+	 * @return is vertical
 	 */
 	public boolean isVertical() {
 		return this.vertical;
