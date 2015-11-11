@@ -20,4 +20,6 @@ public class SliderPanelState extends AbstractComponentState {
 
     public boolean flowInContent = false;
     public int pixel = -1;
+    public boolean autoCollapseSlider = false;
+    
 }

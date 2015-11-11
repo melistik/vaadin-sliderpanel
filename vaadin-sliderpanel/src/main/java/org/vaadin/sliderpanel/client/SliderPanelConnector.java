@@ -86,6 +86,9 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
         if (stateChangeEvent.hasPropertyChanged("pixel")) {
             getWidget().setFixedContentSize(getState().pixel);
         }
+        if (stateChangeEvent.hasPropertyChanged("autoCollapseSlider")) {
+            getWidget().setAutoCollapseSlider(getState().autoCollapseSlider);
+        }
 
         if (ComponentStateUtil.hasStyles(getState())) {
             String extraStyles = "";

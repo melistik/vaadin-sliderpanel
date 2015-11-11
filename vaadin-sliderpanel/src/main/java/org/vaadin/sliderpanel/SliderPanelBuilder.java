@@ -39,6 +39,9 @@ public class SliderPanelBuilder {
 	protected List<String> styles = null;
 
 	protected int pixel = -1;
+	
+    protected boolean autoCollapseSlider = false;
+
 
 	/**
 	 * creates an builder instance that can be configured fluently
@@ -195,6 +198,18 @@ public class SliderPanelBuilder {
 		this.pixel = pixel;
 		return this;
 	}
+	
+    /**
+     * by default the {@link SliderPanel} stays open when use clicks outside<br>
+     * when you enable autoCollapse the slider closes in mode of expand when user clicks somewhere else
+     * 
+     * @param autoCollapseSlider enable auto collapse in expand state
+     * @return builder
+     */
+    public SliderPanelBuilder autoCollapseSlider(final boolean autoCollapseSlider) {
+        this.autoCollapseSlider = autoCollapseSlider;
+        return this;
+    }
 
 	/**
 	 * generates the SliderPanel

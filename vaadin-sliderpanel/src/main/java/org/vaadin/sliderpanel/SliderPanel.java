@@ -122,6 +122,7 @@ public class SliderPanel extends AbstractSingleComponentContainer {
 		getState().flowInContent = builder.flowInContent;
 		getState().tabPosition = builder.tabPosition;
 		getState().animationDuration = builder.animationDuration;
+        getState().autoCollapseSlider = builder.autoCollapseSlider;
 
 		if (builder.caption != null) {
 			getState().caption = builder.caption;

@@ -101,8 +101,9 @@ public class SliderPanelSampleUI extends UI {
         VerticalLayout rightDummyContent = dummyContent("Right Slider Heading", 2);
         rightDummyContent.setWidth(300, Unit.PIXELS);
         SliderPanel rightSlider =
-            new SliderPanelBuilder(rightDummyContent, "Right Slider").mode(SliderMode.RIGHT).tabPosition(SliderTabPosition.MIDDLE)
+            new SliderPanelBuilder(rightDummyContent, "Right Slider (autoCollapse)").mode(SliderMode.RIGHT).tabPosition(SliderTabPosition.MIDDLE)
                 .flowInContent(true)
+                .autoCollapseSlider(true)
                 .style(SliderPanelStyles.COLOR_BLUE)
                 .listener(new SliderPanelListener() {
                     @Override
@@ -119,7 +120,8 @@ public class SliderPanelSampleUI extends UI {
 
         // bottom slider
         SliderPanel bottomSlider =
-            new SliderPanelBuilder(dummyContent("Bottom Slider Heading", 5), "Bottom Slider").mode(SliderMode.BOTTOM)
+            new SliderPanelBuilder(dummyContent("Bottom Slider Heading", 5), "Bottom Slider (autoCollapse)").mode(SliderMode.BOTTOM)
+                .autoCollapseSlider(true)
                 .tabPosition(SliderTabPosition.END).style(SliderPanelStyles.COLOR_RED).build();
         mainLayout.addComponent(bottomSlider);
 
