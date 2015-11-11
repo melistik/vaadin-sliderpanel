@@ -225,6 +225,16 @@ public class SliderPanel extends AbstractSingleComponentContainer {
 	public void setExpanded(final boolean value, final boolean animated) {
 		getRpcProxy(SliderPanelClientRpc.class).setExpand(value, animated);
 	}
+	
+	/**
+     * returns the current state of {@link SliderPanel}<br>
+     * it look only on state - a possible queued change is not checked 
+     * 
+     * @return
+     */
+    public boolean isExpanded() {
+        return getState().expand;
+    }
 
 	/**
 	 * change from expand to collapsed...
