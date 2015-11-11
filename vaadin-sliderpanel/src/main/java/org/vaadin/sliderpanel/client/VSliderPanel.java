@@ -331,6 +331,10 @@ public class VSliderPanel extends SimplePanel {
 	 *            should an event get fired afterwards
 	 */
 	public void animateTo(final boolean expand, final int duration, final boolean fireToggleEvent) {
+                
+                if (this.slideAnimation.isRunning())
+                    return;
+            
 		this.slideAnimation.setAnimateToExpand(expand, fireToggleEvent);
 		this.slideAnimation.run(duration);
 	}
