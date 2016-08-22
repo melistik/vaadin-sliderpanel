@@ -103,7 +103,7 @@
 							</executableDependency>
 							<mainClass>com.vaadin.sass.SassCompiler</mainClass>
 							<arguments>
-								<argument>${basedir}/src/main/resources/scss/sliderpanel.scss</argument>
+								<argument>${basedir}/src/main/resources/org/vaadin/sliderpanel/sliderpanel.scss</argument>
 								<argument>${basedir}/src/main/resources/org/vaadin/sliderpanel/public/sliderpanel/sliderpanel.css</argument>
 							</arguments>
 						</configuration>
