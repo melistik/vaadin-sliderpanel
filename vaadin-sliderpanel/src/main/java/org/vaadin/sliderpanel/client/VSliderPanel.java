@@ -172,7 +172,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
     
     public void setZIndex(int zIndex) {
     	this.contentNode.getStyle().setZIndex(zIndex);
-    	this.navigationElem.getStyle().setZIndex(zIndex);
+    	this.navigationElem.getStyle().setZIndex(zIndex+1);
     	this.wrapperNode.getStyle().setZIndex(zIndex);
     }
 
