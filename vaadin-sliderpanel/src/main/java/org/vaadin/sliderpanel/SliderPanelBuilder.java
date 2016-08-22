@@ -180,11 +180,15 @@ public class SliderPanelBuilder {
 	 *            could get called multiple times
 	 * @return builder
 	 */
-	public SliderPanelBuilder style(final String style) {
+	public SliderPanelBuilder style(final String... style) {
 		if (this.styles == null) {
 			this.styles = new ArrayList<String>();
 		}
-		this.styles.add(style);
+		if (style != null) {
+			for (String s : style) {
+				this.styles.add(s);
+			}
+		}
 		return this;
 	}
 
