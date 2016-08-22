@@ -151,9 +151,9 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
     }
 
     public void setCaption(final String caption, final boolean captionAsHtml) {
-        String captionContent = caption;
+        String captionContent = caption != null ? caption : "";
         if (!captionAsHtml) {
-            captionContent = SafeHtmlUtils.htmlEscape(caption);
+            captionContent = SafeHtmlUtils.htmlEscape(captionContent);
         }
         this.captionNode.setInnerHTML(captionContent);
     }
