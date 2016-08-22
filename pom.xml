@@ -5,7 +5,7 @@
 	<groupId>org.vaadin.addons</groupId>
 	<artifactId>vaadin-sliderpanel-root</artifactId>
 	<packaging>pom</packaging>
-	<version>1.4.1-SNAPSHOT</version>
+	<version>1.4.1</version>
 
 	<modules>
 		<module>vaadin-sliderpanel</module>
@@ -61,7 +61,7 @@
 		<connection>scm:git:git@github.com:melistik/vaadin-sliderpanel.git</connection>
 		<developerConnection>scm:git:git@github.com:melistik/vaadin-sliderpanel.git</developerConnection>
 		<url>https://github.com/melistik/vaadin-sliderpanel.git</url>
-		<tag>HEAD</tag>
+		<tag>vaadin-sliderpanel-root-1.4.1</tag>
 	</scm>
 
 	<repositories>
