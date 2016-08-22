@@ -8,16 +8,20 @@ import org.vaadin.sliderpanel.client.SliderMode;
 import org.vaadin.sliderpanel.client.SliderPanelListener;
 import org.vaadin.sliderpanel.client.SliderTabPosition;
 
+import com.vaadin.annotations.StyleSheet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.server.Page.BrowserWindowResizeEvent;
+import com.vaadin.server.Page.BrowserWindowResizeListener;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -26,14 +30,18 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Theme("valo")
+@StyleSheet("demo.css")
 public class SliderPanelSampleUI extends UI {
 
     private static final String LOREM_IPSUM = "Lorem ipsum dolor sit amet,consetetur sadipscing elitr, "
         + "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.";
+    
+    private SliderPanel secondTopSlider;
 
     @Override
     protected void init(final VaadinRequest vaadinRequest) {
         final VerticalLayout mainLayout = new VerticalLayout();
+        mainLayout.addStyleName("main");
         mainLayout.setSizeFull();
         mainLayout.setMargin(false);
         mainLayout.setSpacing(false);
@@ -41,18 +49,19 @@ public class SliderPanelSampleUI extends UI {
         // top slider
 
         final SliderPanel firstTopSlider =
-            new SliderPanelBuilder(dummyContent("First Top Slider Heading", 1), "First Top Slider")
-                .tabPosition(SliderTabPosition.MIDDLE).style(SliderPanelStyles.COLOR_WHITE).build();
+            new SliderPanelBuilder(dummyContent("First Top Slider Heading", 1), "First Top Slider (flowIn)")
+                .tabPosition(SliderTabPosition.END).style(SliderPanelStyles.COLOR_WHITE).flowInContent(true).build();
 
-        final SliderPanel secondTopSlider =
-            new SliderPanelBuilder(dummyContent("Second Top Slider Heading", 1), "Second Top Slider fixedContentSize")
-                .tabPosition(SliderTabPosition.MIDDLE).style(SliderPanelStyles.COLOR_GREEN)
+        secondTopSlider =
+            new SliderPanelBuilder(dummyContent("Second Top Slider Heading", 1), "Second Top fixedContentSize (flowIn)")
+                .tabPosition(SliderTabPosition.BEGINNING).style(SliderPanelStyles.COLOR_GREEN)
+                .flowInContent(true)
                 .fixedContentSize(Page.getCurrent().getBrowserWindowHeight() - 100).build();
 
         // Two top slider
         HorizontalLayout topTwoSliderLayout = new HorizontalLayout();
         topTwoSliderLayout.setWidth(100, Unit.PERCENTAGE);
-        topTwoSliderLayout.setHeight(40, Unit.PIXELS);
+        topTwoSliderLayout.setHeight(0, Unit.PIXELS);
         topTwoSliderLayout.setMargin(false);
         topTwoSliderLayout.setSpacing(false);
         topTwoSliderLayout.addComponent(firstTopSlider);
@@ -65,20 +74,30 @@ public class SliderPanelSampleUI extends UI {
         HorizontalLayout contentLayout = new HorizontalLayout();
         contentLayout.setSpacing(false);
         contentLayout.setSizeFull();
+        
+        // left slider shoudn't get displayed over this element
+        VerticalLayout paddingLeftComp = new VerticalLayout(new Label("<h3>Left Padding</h3>"
+        		+ "<p>During expand animation Slider shoudn't flow within this content</p>"
+        		+ "<p>This has been fixed in version 1.4.0</p>", ContentMode.HTML));
+        paddingLeftComp.addStyleName(SliderPanelStyles.COLOR_GRAY);
+        paddingLeftComp.setWidth("200px");
+        paddingLeftComp.setHeight("100%");
+        paddingLeftComp.setMargin(true);
+        contentLayout.addComponent(paddingLeftComp);
 
         // left slider
         VerticalLayout leftDummyContent = dummyContent("Left Slider Heading", 3);
         leftDummyContent.setWidth(400, Unit.PIXELS);
         SliderPanel leftSlider =
-            new SliderPanelBuilder(leftDummyContent, "Left slow Slider (flow in Content)").mode(SliderMode.LEFT)
+            new SliderPanelBuilder(leftDummyContent, "Left slow Slider").mode(SliderMode.LEFT)
                 .tabPosition(SliderTabPosition.BEGINNING)
-                .animationDuration(2000).flowInContent(true).build();
+                .animationDuration(2000).zIndex(9980).build();
         contentLayout.addComponent(leftSlider);
 
         // dummy middle content
-        VerticalLayout contentLabel = dummyContent("Main Content", 10);
+        VerticalLayout contentLabel = dummyContent("Main Content", 4);
+        contentLabel.setMargin(true);
         contentLabel.setSizeFull();
-        contentLabel.setMargin(false);
 
         contentLabel.addComponent(new Button("schedule toggle first-top-slider", new Button.ClickListener() {
 
@@ -111,6 +130,7 @@ public class SliderPanelSampleUI extends UI {
             new SliderPanelBuilder(rightDummyContent, "Right Slider (autoCollapse)").mode(SliderMode.RIGHT).tabPosition(SliderTabPosition.MIDDLE)
                 .flowInContent(true)
                 .autoCollapseSlider(true)
+                .zIndex(9980)
                 .style(SliderPanelStyles.COLOR_BLUE)
                 .listener(new SliderPanelListener() {
                     @Override
@@ -127,12 +147,44 @@ public class SliderPanelSampleUI extends UI {
 
         // bottom slider
         SliderPanel bottomSlider =
-            new SliderPanelBuilder(dummyContent("Bottom Slider Heading", 5), "Bottom Slider (autoCollapse)").mode(SliderMode.BOTTOM)
+            new SliderPanelBuilder(dummyContent("Bottom Slider Heading", 5), "Bottom Slider (autoCollapse, flowIn)").mode(SliderMode.BOTTOM)
                 .autoCollapseSlider(true)
+                .flowInContent(true)
                 .tabPosition(SliderTabPosition.END).style(SliderPanelStyles.COLOR_RED).build();
         mainLayout.addComponent(bottomSlider);
-
-        setContent(mainLayout);
+        
+        HorizontalLayout wrapper = new HorizontalLayout(mainLayout, genInfo());
+        wrapper.setSizeFull();
+        wrapper.setExpandRatio(mainLayout, 1);
+        
+        setContent(wrapper);
+        
+        Page.getCurrent().addBrowserWindowResizeListener(new BrowserWindowResizeListener() {
+			
+			@Override
+			public void browserWindowResized(BrowserWindowResizeEvent event) {
+				secondTopSlider.setFixedContentSize(Page.getCurrent().getBrowserWindowHeight() - 100);
+			}
+		});
+    }
+    
+    private Component genInfo() {
+    	VerticalLayout info = new VerticalLayout();
+    	info.setMargin(true);
+    	info.setWidth("320px");
+    	info.setHeight("100%");
+    	info.addStyleName("black-bg");
+    	
+    	Label details = new Label("<h3>Vaadin SliderPanel</h3>"
+    			+ "<p>Developed by Marten Prieß<br/>"
+    			+ "<a href=\"http://www.non-rocket-science.com\">www.non-rocket-science.com</a><p>"
+    			+ "<p>Sample & Sourcecode:<br/><a href=\"https://github.com/melistik/vaadin-sliderpanel/\">github.com</a><br/>"
+    			+ "Vaadin Addon-Site:<br/><a href=\"https://vaadin.com/directory#!addon/sliderpanel\">vaadin.com</a></p>", ContentMode.HTML);
+    	info.addComponent(details);
+    	info.setExpandRatio(details, 1);
+    	info.addComponent(new Label("<p class=\"version\">Version: 1.4.0</p>", ContentMode.HTML));
+    	
+    	return info;
     }
 
     private VerticalLayout dummyContent(final String title, final int length) {

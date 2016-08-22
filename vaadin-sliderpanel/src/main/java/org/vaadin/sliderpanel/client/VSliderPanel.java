@@ -10,6 +10,7 @@ import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -168,6 +169,12 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
     public void setAutoCollapseSlider(boolean autoCollapseSlider) {
         this.autoCollapseSlider = autoCollapseSlider;
     }
+    
+    public void setZIndex(int zIndex) {
+    	this.contentNode.getStyle().setZIndex(zIndex);
+    	this.navigationElem.getStyle().setZIndex(zIndex);
+    	this.wrapperNode.getStyle().setZIndex(zIndex);
+    }
 
     /**
      * handel the closed/open className on the TabElement
@@ -243,19 +250,18 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
                 else {
                     VSliderPanel.this.contentNode.getStyle()
                                                  .setWidth(VSliderPanel.this.componentSize, Style.Unit.PX);
+                    VSliderPanel.this.contentNode.getStyle().setWidth(size, Style.Unit.PX);
+                    VSliderPanel.this.contentNode.getFirstChildElement().getStyle().setPosition(Position.ABSOLUTE);
+                    VSliderPanel.this.contentNode.getFirstChildElement().getStyle().setLeft(-1 * (VSliderPanel.this.componentSize - size), Style.Unit.PX);
 
+                    
                     if (VSliderPanel.this.flowInContent) {
-                        // new
                         VSliderPanel.this.navigationElem.getStyle()
                                                         .setRight(-1 * (size + VSliderPanel.this.tabSize), Style.Unit.PX);
-                        VSliderPanel.this.contentNode.getStyle()
-                                                     .setLeft(-1 * (VSliderPanel.this.componentSize - size), Style.Unit.PX);
                     }
                     else {
                         VSliderPanel.this.navigationElem.getStyle()
                                                         .setRight(-1 * size, Style.Unit.PX);
-                        VSliderPanel.this.contentNode.getStyle()
-                                                     .setLeft(-1 * (VSliderPanel.this.componentSize - size + VSliderPanel.this.tabSize), Style.Unit.PX);
                     }
                 }
             }

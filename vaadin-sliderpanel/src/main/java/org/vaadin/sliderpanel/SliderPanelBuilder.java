@@ -42,6 +42,8 @@ public class SliderPanelBuilder {
 	
     protected boolean autoCollapseSlider = false;
 
+    protected int zIndex = 9990;
+    
 
 	/**
 	 * creates an builder instance that can be configured fluently
@@ -209,6 +211,18 @@ public class SliderPanelBuilder {
     public SliderPanelBuilder autoCollapseSlider(final boolean autoCollapseSlider) {
         this.autoCollapseSlider = autoCollapseSlider;
         return this;
+    }
+    
+    /**
+     * z-Index of navigator, content and wrapper<br>
+     * you can specify for multiple sliders which lays above another
+     * @param zIndex
+     *            default <b>9990</b>
+     * @return
+     */
+    public SliderPanelBuilder zIndex(int zIndex) {
+    	this.zIndex = zIndex;
+    	return this;
     }
 
 	/**

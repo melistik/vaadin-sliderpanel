@@ -123,6 +123,7 @@ public class SliderPanel extends AbstractSingleComponentContainer {
 		getState().tabPosition = builder.tabPosition;
 		getState().animationDuration = builder.animationDuration;
         getState().autoCollapseSlider = builder.autoCollapseSlider;
+        getState().zIndex = builder.zIndex;
 
 		if (builder.caption != null) {
 			getState().caption = builder.caption;
@@ -213,6 +214,26 @@ public class SliderPanel extends AbstractSingleComponentContainer {
 	 */
 	public void setFixedContentSize(final int pixel) {
 		getState().pixel = pixel;
+	}
+	
+	/**
+     * by default the {@link SliderPanel} stays open when use clicks outside<br>
+     * when you enable autoCollapse the slider closes in mode of expand when user clicks somewhere else
+     * 
+     * @param autoCollapseSlider enable auto collapse in expand state
+     */
+	public void setAutoCollapseSlider(boolean autoCollapseSlider) {
+		getState().autoCollapseSlider = autoCollapseSlider;
+	}
+	
+	/**
+     * z-Index of navigator, content and wrapper<br>
+     * you can specify for multiple sliders which lays above another
+     * @param zIndex
+     *            default <b>9990</b>
+     */
+	public void setZIndex(int zIndex) {
+		getState().zIndex = zIndex;
 	}
 
 	/**
@@ -308,7 +329,7 @@ public class SliderPanel extends AbstractSingleComponentContainer {
 	public void scheduleExpand(final int delayMillis) {
 		getRpcProxy(SliderPanelClientRpc.class).scheduleExpand(true, true, delayMillis);
 	}
-
+	
 	/**
 	 * width/height will get managed internally<br>
 	 * to fix conent's height/width please use {@link SliderPanelBuilder#fixedContentSize(int)}
