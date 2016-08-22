@@ -71,9 +71,111 @@ SliderPanel sliderPanel = new SliderPanelBuilder(dummyContent("White Slider", 3)
   .style(SliderPanelStyles.COLOR_WHITE)
   .build();
 ```
-
+Version 1.4.x rearranged the sass styling in order to use mixins and allow to overwrite defaults. The Sample contains an example how you can configure your custom styling. Explanation see Styling.
 
 Details to the addon you can find on [Vaadin](https://vaadin.com/directory#addon/sliderpanel)
+
+Styling
+=======
+```java
+// add your stylesheet to UI
+// Specify your custom tabSize and add your custom-stylename
+new SliderPanelBuilder(dummyContent("Bottom Slider Heading", 5), "Bottom Custom-Style").mode(SliderMode.BOTTOM)
+                .tabSize(80)
+                .tabPosition(SliderTabPosition.END).style("my-sliderpanel").build()
+```
+
+```scss
+$tab-long-size-v: 460; // specify the total length of the sliderpanel-navigator
+$tab-short-size-v: 80; // height of the navigator
+$tab-caption-size-v: 390; // width of caption within navigator
+
+/* relative to org/vaadin/sliderpanel */
+@import "../components/sliderpanel";
+.my-sliderpanel {
+  @include sliderpanel;
+
+  .v-sliderpanel-wrapper {
+    .v-sliderpanel-tab {
+      // increase font-size of caption
+      .v-sliderpanel-caption {
+        font-size: 30px;
+        line-height: $tab-short-size-v - 6px;
+      }
+	// increase size of icon
+      .v-sliderpanel-icon {
+        height: 44px;
+        width: 44px;
+        line-height: 44px;
+        font-size: 32px;
+      }
+    }
+  }
+}
+```
+Finally you need to configure your pom to unpack the  sliperpanel-components into your project and compile your scss file
+```xml
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-dependency-plugin</artifactId>
+	<executions>
+		<execution>
+			<id>unpack</id>
+			<phase>generate-sources</phase>
+			<goals>
+				<goal>unpack</goal>
+			</goals>
+			<configuration>
+				<artifactItems>
+					<artifactItem>
+						<groupId>org.vaadin.addons</groupId>
+						<artifactId>vaadin-sliderpanel</artifactId>
+						<version>1.4.0-SNAPSHOT</version>
+						<type>jar</type>
+						<includes>**/sliderpanel/components/*.scss</includes>
+						<outputDirectory>${basedir}/src/main/resources</outputDirectory>
+					</artifactItem>
+				</artifactItems>
+			</configuration>
+		</execution>
+	</executions>
+</plugin>
+
+<plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>exec-maven-plugin</artifactId>
+	<version>1.5.0</version>
+	<executions>
+		<execution>
+			<id>stylesheet</id>
+			<phase>compile</phase>
+			<goals>
+				<goal>java</goal>
+			</goals>
+			<configuration>
+				<includeProjectDependencies>true</includeProjectDependencies>
+				<includePluginDependencies>true</includePluginDependencies>
+				<executableDependency>
+					<groupId>com.vaadin</groupId>
+					<artifactId>vaadin-sass-compiler</artifactId>
+				</executableDependency>
+				<mainClass>com.vaadin.sass.SassCompiler</mainClass>
+				<arguments>
+					<argument>${basedir}/src/main/resources/org/vaadin/sliderpanel/demo/demo.scss</argument>
+					<argument>${basedir}/src/main/resources/org/vaadin/sliderpanel/demo/demo.css</argument>
+				</arguments>
+			</configuration>
+		</execution>
+	</executions>
+	<dependencies>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-sass-compiler</artifactId>
+			<version>0.9.13</version>
+		</dependency>
+	</dependencies>
+</plugin>
+```
 
 Layouting
 ========
