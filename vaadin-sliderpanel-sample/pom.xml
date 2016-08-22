@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>vaadin-sliderpanel-root</artifactId>
 		<groupId>org.vaadin.addons</groupId>
-		<version>1.4.0-SNAPSHOT</version>
+		<version>1.4.0</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>org.vaadin.addons</groupId>
 			<artifactId>vaadin-sliderpanel</artifactId>
-			<version>1.4.0-SNAPSHOT</version>
+			<version>1.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -272,7 +272,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -291,7 +291,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
