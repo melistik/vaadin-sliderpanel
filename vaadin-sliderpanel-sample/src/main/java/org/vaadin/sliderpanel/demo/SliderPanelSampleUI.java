@@ -1,9 +1,12 @@
-package org.vaadin.sliderpanel;
+package org.vaadin.sliderpanel.demo;
 
 import java.util.Date;
 
 import javax.servlet.annotation.WebServlet;
 
+import org.vaadin.sliderpanel.SliderPanel;
+import org.vaadin.sliderpanel.SliderPanelBuilder;
+import org.vaadin.sliderpanel.SliderPanelStyles;
 import org.vaadin.sliderpanel.client.SliderMode;
 import org.vaadin.sliderpanel.client.SliderPanelListener;
 import org.vaadin.sliderpanel.client.SliderTabPosition;
@@ -146,11 +149,13 @@ public class SliderPanelSampleUI extends UI {
         mainLayout.setExpandRatio(contentLayout, 1);
 
         // bottom slider
+        // i've created a custom sliderpanel style within demo.scss with different labelwidth 
         SliderPanel bottomSlider =
-            new SliderPanelBuilder(dummyContent("Bottom Slider Heading", 5), "Bottom Slider (autoCollapse, flowIn)").mode(SliderMode.BOTTOM)
+            new SliderPanelBuilder(dummyContent("Bottom Slider Heading", 5), "Bottom Custom-Style").mode(SliderMode.BOTTOM)
                 .autoCollapseSlider(true)
                 .flowInContent(true)
-                .tabPosition(SliderTabPosition.END).style(SliderPanelStyles.COLOR_RED).build();
+                .tabSize(80)
+                .tabPosition(SliderTabPosition.END).style("my-sliderpanel", SliderPanelStyles.COLOR_RED).build();
         mainLayout.addComponent(bottomSlider);
         
         HorizontalLayout wrapper = new HorizontalLayout(mainLayout, genInfo());
@@ -159,6 +164,7 @@ public class SliderPanelSampleUI extends UI {
         
         setContent(wrapper);
         
+        Page.getCurrent().setTitle("SliderPanel Sample");
         Page.getCurrent().addBrowserWindowResizeListener(new BrowserWindowResizeListener() {
 			
 			@Override
@@ -211,9 +217,9 @@ public class SliderPanelSampleUI extends UI {
         name = "SliderPanelSampleUIServlet",
         asyncSupported = true)
     @VaadinServletConfiguration(
-        ui = org.vaadin.sliderpanel.SliderPanelSampleUI.class,
+        ui = org.vaadin.sliderpanel.demo.SliderPanelSampleUI.class,
         productionMode = false,
-        widgetset = "org.vaadin.slidersample.WidgetSet")
+        widgetset = "org.vaadin.sliderpanel.demo.WidgetSet")
     public static class MyUIServlet extends VaadinServlet {
     }
 }

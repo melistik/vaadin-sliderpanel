@@ -1,0 +1,7 @@
+$tab-long-size-v: 260;
+$tab-short-size-v: 40;
+$tab-caption-size-v: 210;
+
+@import "components/sliderpanel";
+
+@include sliderpanel;

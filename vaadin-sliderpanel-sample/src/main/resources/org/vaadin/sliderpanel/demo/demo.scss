@@ -1,0 +1,56 @@
+
+$tab-long-size-v: 460;
+$tab-short-size-v: 80;
+$tab-caption-size-v: 390;
+
+/* relative to org/vaadin/sliderpanel */
+@import "../components/sliderpanel";
+.my-sliderpanel {
+  @include sliderpanel;
+
+  .v-sliderpanel-wrapper {
+    .v-sliderpanel-tab {
+      .v-sliderpanel-caption {
+        font-size: 30px;
+        line-height: $tab-short-size-v - 6px;
+      }
+
+      .v-sliderpanel-icon {
+        height: 44px;
+        width: 44px;
+        line-height: 44px;
+        font-size: 32px;
+      }
+    }
+  }
+}
+
+/* demo-styling */
+.v-verticallayout {
+  &.sp-gray {
+  	background: #808080;
+  	color: #fff;
+
+    h3 {
+    	color: #fff !important;
+    }
+  }
+  &.black-bg {
+  	background: #000;
+  	color: #fff;
+
+    h3 {
+    	color: #fff !important;
+    }
+
+    .version {
+    	text-align: right;
+    	font-style: italic;
+    }
+  }
+
+  &.main > .v-expand > .v-slot:nth-child(1) {
+      height: 0;
+  }
+
+}
