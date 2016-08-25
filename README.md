@@ -35,7 +35,7 @@ Add the dependency to your pom the GWT inherits will get automatically added by 
 ```
 
 ```xml
-<inherits name="org.vaadin.sliderpanel.Widgetset" />
+<inherits name="org.vaadin.sliderpanel.WidgetSet" />
 ```
 
 You can recolor the panel by changing the css like:
