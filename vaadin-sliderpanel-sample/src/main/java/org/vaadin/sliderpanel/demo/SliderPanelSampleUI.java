@@ -1,5 +1,6 @@
 package org.vaadin.sliderpanel.demo;
 
+import java.text.DateFormat;
 import java.util.Date;
 
 import javax.servlet.annotation.WebServlet;
@@ -10,27 +11,32 @@ import org.vaadin.sliderpanel.SliderPanelStyles;
 import org.vaadin.sliderpanel.client.SliderMode;
 import org.vaadin.sliderpanel.client.SliderPanelListener;
 import org.vaadin.sliderpanel.client.SliderTabPosition;
+import org.vaadin.sliderpanel.demo.data.DummyDataGen;
+import org.vaadin.sliderpanel.demo.data.Inhabitants;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.Page;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.Page.BrowserWindowResizeEvent;
 import com.vaadin.server.Page.BrowserWindowResizeListener;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.renderers.DateRenderer;
 
 @Theme("valo")
 @StyleSheet("demo.css")
@@ -51,8 +57,15 @@ public class SliderPanelSampleUI extends UI {
 
         // top slider
 
+
+        Grid grid = genGrid();
+        VerticalLayout topLeftSliderContent = new VerticalLayout(new Label("Grid works now!"), grid);
+        topLeftSliderContent.setMargin(true);
+        topLeftSliderContent.setSpacing(true);
+        topLeftSliderContent.setExpandRatio(grid, 1);
+
         final SliderPanel firstTopSlider =
-            new SliderPanelBuilder(dummyContent("First Top Slider Heading", 1), "First Top Slider (flowIn)")
+            new SliderPanelBuilder(topLeftSliderContent, "First Top with Grid")
                 .tabPosition(SliderTabPosition.END).style(SliderPanelStyles.COLOR_WHITE).flowInContent(true).build();
 
         secondTopSlider =
@@ -81,7 +94,8 @@ public class SliderPanelSampleUI extends UI {
         // left slider shoudn't get displayed over this element
         VerticalLayout paddingLeftComp = new VerticalLayout(new Label("<h3>Left Padding</h3>"
         		+ "<p>During expand animation Slider shoudn't flow within this content</p>"
-        		+ "<p>This has been fixed in version 1.4.0</p>", ContentMode.HTML));
+        		+ "<p>This has been fixed in version 1.4.0</p>"
+        		+ "<p><b>Wokring with Grid</b> since version 1.4.2</p>", ContentMode.HTML));
         paddingLeftComp.addStyleName(SliderPanelStyles.COLOR_GRAY);
         paddingLeftComp.setWidth("200px");
         paddingLeftComp.setHeight("100%");
@@ -124,13 +138,15 @@ public class SliderPanelSampleUI extends UI {
         VerticalLayout rightDummyContent = dummyContent("Right Slider Heading", 1);
         rightDummyContent.setWidth(400, Unit.PIXELS);
         
+        
         ComboBox simpleCombo = new ComboBox("Combo");
         simpleCombo.addItems(SliderMode.values());
         rightDummyContent.addComponent(simpleCombo);
         rightDummyContent.addComponent(new Label("vaadin's combo creates an inner popup that is also get catched by autoCollapse detection"));
+        rightDummyContent.addComponent(genGrid());
         
         SliderPanel rightSlider =
-            new SliderPanelBuilder(rightDummyContent, "Right Slider (autoCollapse)").mode(SliderMode.RIGHT).tabPosition(SliderTabPosition.MIDDLE)
+            new SliderPanelBuilder(rightDummyContent, "Right Slider + Grid (autoCollapse)").mode(SliderMode.RIGHT).tabPosition(SliderTabPosition.MIDDLE)
                 .flowInContent(true)
                 .autoCollapseSlider(true)
                 .zIndex(9980)
@@ -174,7 +190,25 @@ public class SliderPanelSampleUI extends UI {
 		});
     }
     
-    private Component genInfo() {
+	private Grid genGrid() {
+		// init Grid
+		final Grid grid = new Grid();
+		grid.setSizeFull();
+
+		// init Container
+		BeanItemContainer<Inhabitants> container = new BeanItemContainer<Inhabitants>(Inhabitants.class,
+				DummyDataGen.genInhabitants(100));
+		grid.setContainerDataSource(container);
+		grid.setColumnOrder("id", "gender", "name", "bodySize", "birthday", "onFacebook");
+
+		grid.getColumn("birthday")
+				.setRenderer(new DateRenderer(DateFormat.getDateInstance()))
+				.setWidth(210);
+		
+		return grid;
+	}
+
+	private Component genInfo() {
     	VerticalLayout info = new VerticalLayout();
     	info.setMargin(true);
     	info.setWidth("320px");
@@ -188,7 +222,7 @@ public class SliderPanelSampleUI extends UI {
     			+ "Vaadin Addon-Site:<br/><a href=\"https://vaadin.com/directory#!addon/sliderpanel\">vaadin.com</a></p>", ContentMode.HTML);
     	info.addComponent(details);
     	info.setExpandRatio(details, 1);
-    	info.addComponent(new Label("<p class=\"version\">Version: 1.4.0</p>", ContentMode.HTML));
+    	info.addComponent(new Label("<p class=\"version\">Version: 1.4.2</p>", ContentMode.HTML));
     	
     	return info;
     }
@@ -211,6 +245,8 @@ public class SliderPanelSampleUI extends UI {
         component.setSpacing(true);
         return component;
     }
+    
+    
 
     @WebServlet(
         urlPatterns = "/*",
