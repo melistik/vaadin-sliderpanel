@@ -325,8 +325,6 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
             updateTabElemClassName();
 
             if (!VSliderPanel.this.expand) {
-                VSliderPanel.this.contentNode.getStyle()
-                                             .setDisplay(Display.NONE);
                 changeSize(0);
             }
             else {
