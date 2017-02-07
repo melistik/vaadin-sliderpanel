@@ -2,9 +2,13 @@ package org.vaadin.sliderpanel.demo.data;
 
 import java.util.Date;
 
-import com.google.gwt.i18n.server.testing.Gender;
 
 public class Inhabitants {
+
+	public enum Gender {
+		FEMALE,
+		MALE;
+	}
 
 	private long id;
 	private Gender gender;

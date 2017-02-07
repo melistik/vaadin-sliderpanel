@@ -7,8 +7,7 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>vaadin-sliderpanel-sample</artifactId>
-	<packaging>war</packaging>
+	<artifactId>vaadin-sliderpanel-demo</artifactId>
 
 	<developers>
 		<developer>
@@ -19,76 +18,89 @@
 		</developer>
 	</developers>
 
-	<licenses>
-		<license>
-			<name>The MIT License (MIT)</name>
-			<url>http://opensource.org/licenses/MIT</url>
-		</license>
-	</licenses>
+
+	<properties>
+		<start-class>org.vaadin.sliderpanel.demo.Application</start-class>
+		<spring.boot.version>1.5.1.RELEASE</spring.boot.version>
+		<!-- Important: Add the main class of your project -->
+	</properties>
+
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-bom</artifactId>
+				<version>${vaadin.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<!-- Import dependency management from Spring Boot -->
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring.boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-spring-boot-starter</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.vaadin.addons</groupId>
 			<artifactId>vaadin-sliderpanel</artifactId>
-			<version>1.4.3-SNAPSHOT</version>
+			<version>${version}</version>
 		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-server</artifactId>
-			<version>${vaadin.version}</version>
-		</dependency>
+
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-client</artifactId>
-			<version>${vaadin.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-client-compiler</artifactId>
-			<version>${vaadin.version}</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-themes</artifactId>
-			<version>${vaadin.version}</version>
 		</dependency>
 	</dependencies>
 
 	<build>
+		<!-- Turn on filtering by default for application properties -->
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/application.yml</include>
+					<include>**/application.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<excludes>
+					<exclude>**/application.yml</exclude>
+					<exclude>**/application.properties</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<encoding>${project.encoding}</encoding>
-				</configuration>
-			</plugin>
 
 			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.3</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
 				<configuration>
-					<packagingExcludes>
-						**/VAADIN/gwt-unitCache/**,
-						**/VAADIN/widgetsets/WEB-INF/**,
-						**/WEB-INF/lib/servlet-api-*.jar,
-						**/WEB-INF/lib/vaadin-client-*.jar,
-						**/WEB-INF/lib/jetty-*.jar,
-						**/WEB-INF/lib/ant-*.jar,
-						**/WEB-INF/classes/gwt-unitCache/**,
-						**/WEB-INF/classes/themes/**,
-						**/WEB-INF/classes/widgetsets/**
-					</packagingExcludes>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			
@@ -107,7 +119,7 @@
                                 <artifactItem>
 									<groupId>org.vaadin.addons</groupId>
 									<artifactId>vaadin-sliderpanel</artifactId>
-									<version>1.4.0-SNAPSHOT</version>
+									<version>${version}</version>
 									<type>jar</type>
                                     <includes>**/sliderpanel/components/*.scss</includes>
                                     <outputDirectory>${basedir}/src/main/resources</outputDirectory>
@@ -158,14 +170,18 @@
 				<artifactId>vaadin-maven-plugin</artifactId>
 				<version>${vaadin.version}</version>
 				<configuration>
-					<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
-					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets</webappDirectory>
-					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets</hostedWebapp>
+					<extraJvmArgs>-Xmx1g -Xss1024k</extraJvmArgs>
+					<webappDirectory>${project.build.outputDirectory}/VAADIN/widgetsets</webappDirectory>
+					<hostedWebapp>${project.build.outputDirectory}/VAADIN/widgetsets</hostedWebapp>
 					<noServer>true</noServer>
-					<persistentunitcachedir>${basedir}/target/tmp/gwt-unitCache</persistentunitcachedir>
-					<compileReport>true</compileReport>
+					<!-- Remove draftCompile when project is ready -->
+					<draftCompile>true</draftCompile>
+					<persistentunitcachedir>${project.build.directory}/gwtdirt</persistentunitcachedir>
+					<compileReport>false</compileReport>
+					<style>OBF</style>
 					<strict>true</strict>
-					<runTarget>http://localhost:8080/</runTarget>
+					<!-- Symbol maps etc, not needed in vaadin app, just target them outside war -->
+					<deploy>${project.build.directory}/gwt-deploy</deploy>
 				</configuration>
 				<executions>
 					<!-- You are free to mark this as permanently ignored in Eclipse -->
@@ -174,6 +190,7 @@
 							<!-- if you don't specify any modules, the plugin will find them -->
 						</configuration>
 						<goals>
+							<goal>clean</goal>
 							<goal>resources</goal>
 							<goal>update-widgetset</goal>
 							<goal>compile</goal>
@@ -182,45 +199,31 @@
 				</executions>
 			</plugin>
 
-			<!-- The Jetty plugin allows us to easily test the development build by 
-				running jetty:run on the command line. -->
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>${jetty.plugin.version}</version>
-				<configuration>
-					<scanIntervalSeconds>2</scanIntervalSeconds>
-				</configuration>
-			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.4</version>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>${start-class}</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>2.6.1</version>
-				<!-- Clean up also any pre-compiled themes -->
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.boot.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
-					<filesets>
-						<fileset>
-							<directory>src/main/webapp/VAADIN/themes</directory>
-							<includes>
-								<include>**/styles.css</include>
-								<include>**/styles.scss.cache</include>
-							</includes>
-						</fileset>
-						<fileset>
-							<!-- Clean-up widgetset required for "inplace" compilation -->
-							<directory>${basedir}/src/main/webapp/VAADIN/widgetsets</directory>
-						</fileset>
-						<fileset>
-							<!-- Clean-up gwt cache -->
-							<directory>${basedir}/src/main/webapp/VAADIN/gwt-unitCache</directory>
-						</fileset>
-					</filesets>
+					<mainClass>${start-class}</mainClass>
 				</configuration>
 			</plugin>
 

@@ -9,7 +9,7 @@
 
 	<modules>
 		<module>vaadin-sliderpanel</module>
-		<module>vaadin-sliderpanel-sample</module>
+		<module>vaadin-sliderpanel-demo</module>
 	</modules>
 
 	<developers>
@@ -29,8 +29,7 @@
 	</licenses>
 
 	<properties>
-		<vaadin.version>7.5.2</vaadin.version>
-		<jetty.plugin.version>9.2.3.v20140905</jetty.plugin.version>
+		<vaadin.version>7.7.6</vaadin.version>
 		<project.source.version>1.7</project.source.version>
 		<project.target.version>1.7</project.target.version>
 		<project.encoding>UTF-8</project.encoding>
