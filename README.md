@@ -19,6 +19,9 @@ Main Features
   * 5 pre designed colors (by *SliderPanelStyles*)
   * SliderNavigation element can flow within underlaying content or not
   * configure custom TabSize (need to change css as well!)
+* Vaadin compatibility
+  * 1.x Vaadin 7
+  * 2.x Vaadin 8
 
 
 Workflow
@@ -72,6 +75,10 @@ SliderPanel sliderPanel = new SliderPanelBuilder(dummyContent("White Slider", 3)
   .build();
 ```
 Version 1.4.x rearranged the sass styling in order to use mixins and allow to overwrite defaults. The Sample contains an example how you can configure your custom styling. Explanation see Styling.
+
+
+Version 2.x.x Compatible with Vaadin 8
+
 
 Details to the addon you can find on [Vaadin](https://vaadin.com/directory#addon/sliderpanel)
 
@@ -130,7 +137,7 @@ Finally you need to configure your pom to unpack the  sliperpanel-components int
 					<artifactItem>
 						<groupId>org.vaadin.addons</groupId>
 						<artifactId>vaadin-sliderpanel</artifactId>
-						<version>1.4.0-SNAPSHOT</version>
+						<version>2.0.0-SNAPSHOT</version>
 						<type>jar</type>
 						<includes>**/sliderpanel/components/*.scss</includes>
 						<outputDirectory>${basedir}/src/main/resources</outputDirectory>
@@ -210,7 +217,7 @@ The Layouting of the SliderPanel is not made absolute because of the possibility
 The MIT License (MIT)
 -------------------------
 
-Copyright (c) 2015 Non-Rocket-Science.com
+Copyright (c) 2017 rocketbase.io
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
