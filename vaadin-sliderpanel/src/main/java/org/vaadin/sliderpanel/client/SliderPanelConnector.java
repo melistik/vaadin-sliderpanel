@@ -1,7 +1,5 @@
 package org.vaadin.sliderpanel.client;
 
-import org.vaadin.sliderpanel.SliderPanel;
-
 import com.vaadin.client.ComponentConnector;
 import com.vaadin.client.ConnectorHierarchyChangeEvent;
 import com.vaadin.client.communication.RpcProxy;
@@ -10,6 +8,7 @@ import com.vaadin.client.ui.AbstractSingleComponentContainerConnector;
 import com.vaadin.client.ui.SimpleManagedLayout;
 import com.vaadin.shared.ui.ComponentStateUtil;
 import com.vaadin.shared.ui.Connect;
+import org.vaadin.sliderpanel.SliderPanel;
 
 /**
  * connects SliderPanel with GWT VSliderPanel
@@ -20,24 +19,14 @@ import com.vaadin.shared.ui.Connect;
 @Connect(SliderPanel.class)
 public class SliderPanelConnector extends AbstractSingleComponentContainerConnector implements SimpleManagedLayout {
 
-    private static final long serialVersionUID = 8211838780745411232L;
-
     SliderPanelServerRpc rpc = RpcProxy.create(SliderPanelServerRpc.class, this);
 
     public SliderPanelConnector() {
         super();
 
-        getWidget().setToggleListener(new SliderPanelListener() {
-
-            @Override
-            public void onToggle(final boolean expanded) {
-                SliderPanelConnector.this.rpc.clicked(expanded);
-            }
-        });
+        getWidget().setToggleListener(expanded -> SliderPanelConnector.this.rpc.clicked(expanded));
 
         registerRpc(SliderPanelClientRpc.class, new SliderPanelClientRpc() {
-
-            private static final long serialVersionUID = -4626540340348038160L;
 
             @Override
             public void setExpand(final boolean expand, final boolean animated) {

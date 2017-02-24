@@ -51,7 +51,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
 
     private final SliderAnimation slideAnimation = new SliderAnimation();
 
-    private SliderPanelListener listener;
+    private ToggleListener listener;
 
     private boolean autoCollapseSlider = false;
 
@@ -213,7 +213,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
         return DOM.asOld(this.contentNode);
     }
 
-    public void setToggleListener(final SliderPanelListener toggleListener) {
+    public void setToggleListener(final ToggleListener toggleListener) {
         this.listener = toggleListener;
     }
 

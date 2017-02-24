@@ -1,34 +1,28 @@
 package org.vaadin.sliderpanel.demo;
 
 import com.vaadin.annotations.StyleSheet;
-import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.Page;
 import com.vaadin.server.Page.BrowserWindowResizeEvent;
 import com.vaadin.server.Page.BrowserWindowResizeListener;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.renderers.DateRenderer;
 import org.springframework.beans.factory.annotation.Value;
 import org.vaadin.sliderpanel.SliderPanel;
 import org.vaadin.sliderpanel.SliderPanelBuilder;
 import org.vaadin.sliderpanel.SliderPanelStyles;
 import org.vaadin.sliderpanel.client.SliderMode;
-import org.vaadin.sliderpanel.client.SliderPanelListener;
 import org.vaadin.sliderpanel.client.SliderTabPosition;
 import org.vaadin.sliderpanel.demo.data.DummyDataGen;
 import org.vaadin.sliderpanel.demo.data.Inhabitants;
 
-import java.text.DateFormat;
 import java.util.Date;
 
 @SpringUI()
-@Theme("valo")
 @StyleSheet("demo.css")
 @Widgetset("org.vaadin.sliderpanel.demo.WidgetSet")
 public class DemoUI extends UI {
@@ -70,7 +64,7 @@ public class DemoUI extends UI {
                         .style(SliderPanelStyles.COLOR_GREEN)
                         .flowInContent(true)
                         .fixedContentSize(Page.getCurrent()
-                                              .getBrowserWindowHeight() - 100)
+                                .getBrowserWindowHeight() - 100)
                         .build();
 
         // Two top slider
@@ -91,14 +85,18 @@ public class DemoUI extends UI {
         contentLayout.setSizeFull();
 
         // left slider shoudn't get displayed over this element
-        VerticalLayout paddingLeftComp = new VerticalLayout(new Label("<h3>Left Padding</h3>"
-                + "<p>During expand animation Slider shoudn't flow within this content</p>"
-                + "<p>This has been fixed in version 1.4.0</p>"
-                + "<p><b>Wokring with Grid</b> since version 1.4.2</p>", ContentMode.HTML));
+        VerticalLayout paddingLeftComp = new VerticalLayout();
         paddingLeftComp.addStyleName(SliderPanelStyles.COLOR_GRAY);
         paddingLeftComp.setWidth("200px");
         paddingLeftComp.setHeight("100%");
         paddingLeftComp.setMargin(true);
+
+        Label leftPaddingContent = new Label("<h3>Left Padding</h3>"
+                + "<p><b>Wokring with Grid</b> since version 1.4.2</p>"
+                + "<p>compatible with <b>Vaadin 8</b></p>", ContentMode.HTML);
+        leftPaddingContent.setSizeFull();
+        paddingLeftComp.addComponentsAndExpand(leftPaddingContent);
+
         contentLayout.addComponent(paddingLeftComp);
 
         // left slider
@@ -106,10 +104,10 @@ public class DemoUI extends UI {
         leftDummyContent.setWidth(400, Unit.PIXELS);
         SliderPanel leftSlider =
                 new SliderPanelBuilder(leftDummyContent, "Left slow Slider").mode(SliderMode.LEFT)
-                                                                            .tabPosition(SliderTabPosition.BEGINNING)
-                                                                            .animationDuration(2000)
-                                                                            .zIndex(9980)
-                                                                            .build();
+                        .tabPosition(SliderTabPosition.BEGINNING)
+                        .animationDuration(2000)
+                        .zIndex(9980)
+                        .build();
         contentLayout.addComponent(leftSlider);
 
         // dummy middle content
@@ -141,27 +139,24 @@ public class DemoUI extends UI {
 
 
         ComboBox simpleCombo = new ComboBox("Combo");
-        simpleCombo.addItems(SliderMode.values());
+        simpleCombo.setItems(SliderMode.values());
         rightDummyContent.addComponent(simpleCombo);
         rightDummyContent.addComponent(new Label("vaadin's combo creates an inner popup that is also get catched by autoCollapse detection"));
         rightDummyContent.addComponent(genGrid());
 
         SliderPanel rightSlider =
                 new SliderPanelBuilder(rightDummyContent, "Right Slider + Grid (autoCollapse)").mode(SliderMode.RIGHT)
-                                                                                               .tabPosition(SliderTabPosition.MIDDLE)
-                                                                                               .flowInContent(true)
-                                                                                               .autoCollapseSlider(true)
-                                                                                               .zIndex(9980)
-                                                                                               .style(SliderPanelStyles.COLOR_BLUE)
-                                                                                               .listener(new SliderPanelListener() {
-                                                                                                   @Override
-                                                                                                   public void onToggle(final boolean expand) {
-                                                                                                       listenerLabel.setValue(
-                                                                                                               "event-listener for right-slider: <b>" + (expand ? "expand" : "collapsed") + "</b> by: "
-                                                                                                                       + new Date().toString());
-                                                                                                   }
-                                                                                               })
-                                                                                               .build();
+                        .tabPosition(SliderTabPosition.MIDDLE)
+                        .flowInContent(true)
+                        .autoCollapseSlider(true)
+                        .zIndex(9980)
+                        .style(SliderPanelStyles.COLOR_BLUE)
+                        .listener(e -> {
+                            listenerLabel.setValue(
+                                    "event-listener for right-slider: <b>" + (e.isExpand() ? "expand" : "collapsed") + "</b> by: "
+                                            + new Date().toString());
+                        })
+                        .build();
         contentLayout.addComponent(rightSlider);
 
         // fit full screen
@@ -172,45 +167,42 @@ public class DemoUI extends UI {
         // i've created a custom sliderpanel style within demo.scss with different labelwidth 
         SliderPanel bottomSlider =
                 new SliderPanelBuilder(dummyContent("Bottom Slider Heading", 5), "Bottom Custom-Style").mode(SliderMode.BOTTOM)
-                                                                                                       .autoCollapseSlider(true)
-                                                                                                       .flowInContent(true)
-                                                                                                       .tabSize(80)
-                                                                                                       .tabPosition(SliderTabPosition.END)
-                                                                                                       .style("my-sliderpanel", SliderPanelStyles.COLOR_RED)
-                                                                                                       .build();
+                        .autoCollapseSlider(true)
+                        .flowInContent(true)
+                        .tabSize(80)
+                        .tabPosition(SliderTabPosition.END)
+                        .style("my-sliderpanel", SliderPanelStyles.COLOR_RED)
+                        .build();
         mainLayout.addComponent(bottomSlider);
 
         HorizontalLayout wrapper = new HorizontalLayout(mainLayout, genInfo());
         wrapper.setSizeFull();
         wrapper.setExpandRatio(mainLayout, 1);
+        wrapper.setSpacing(false);
 
         setContent(wrapper);
 
-        Page.getCurrent().setTitle("SliderPanel Sample");
-        Page.getCurrent().addBrowserWindowResizeListener(new BrowserWindowResizeListener() {
+        Page.getCurrent()
+                .setTitle("SliderPanel Sample");
+        Page.getCurrent()
+                .addBrowserWindowResizeListener(new BrowserWindowResizeListener() {
 
-            @Override
-            public void browserWindowResized(BrowserWindowResizeEvent event) {
-                secondTopSlider.setFixedContentSize(Page.getCurrent()
-                                                        .getBrowserWindowHeight() - 100);
-            }
-        });
+                    @Override
+                    public void browserWindowResized(BrowserWindowResizeEvent event) {
+                        secondTopSlider.setFixedContentSize(Page.getCurrent()
+                                .getBrowserWindowHeight() - 100);
+                    }
+                });
     }
 
     private Grid genGrid() {
         // init Grid
-        final Grid grid = new Grid();
+        final Grid<Inhabitants> grid = new Grid(Inhabitants.class);
         grid.setSizeFull();
 
         // init Container
-        BeanItemContainer<Inhabitants> container = new BeanItemContainer<Inhabitants>(Inhabitants.class,
-                DummyDataGen.genInhabitants(100));
-        grid.setContainerDataSource(container);
+        grid.setItems(DummyDataGen.genInhabitants(100));
         grid.setColumnOrder("id", "gender", "name", "bodySize", "birthday", "onFacebook");
-
-        grid.getColumn("birthday")
-            .setRenderer(new DateRenderer(DateFormat.getDateInstance()))
-            .setWidth(210);
 
         return grid;
     }
@@ -224,11 +216,11 @@ public class DemoUI extends UI {
 
         Label details = new Label("<h3>Vaadin SliderPanel</h3>"
                 + "<p>Developed by Marten Prieß<br/>"
-                + "<a href=\"http://www.non-rocket-science.com\">www.non-rocket-science.com</a><p>"
+                + "<a href=\"http://www.rocketbase.io\">www.rocketbase.io</a><p>"
                 + "<p>Sample & Sourcecode:<br/><a href=\"https://github.com/melistik/vaadin-sliderpanel/\">github.com</a><br/>"
                 + "Vaadin Addon-Site:<br/><a href=\"https://vaadin.com/directory#!addon/sliderpanel\">vaadin.com</a></p>", ContentMode.HTML);
-        info.addComponent(details);
-        info.setExpandRatio(details, 1);
+        details.setSizeFull();
+        info.addComponentsAndExpand(details);
         info.addComponent(new Label("<p class=\"version\">Version: " + buildVersion + "</p>", ContentMode.HTML));
 
         return info;
