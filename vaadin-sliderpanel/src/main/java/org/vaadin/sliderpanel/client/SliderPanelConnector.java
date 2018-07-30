@@ -1,5 +1,7 @@
 package org.vaadin.sliderpanel.client;
 
+import org.vaadin.sliderpanel.SliderPanel;
+
 import com.vaadin.client.ComponentConnector;
 import com.vaadin.client.ConnectorHierarchyChangeEvent;
 import com.vaadin.client.communication.RpcProxy;
@@ -8,7 +10,6 @@ import com.vaadin.client.ui.AbstractSingleComponentContainerConnector;
 import com.vaadin.client.ui.SimpleManagedLayout;
 import com.vaadin.shared.ui.ComponentStateUtil;
 import com.vaadin.shared.ui.Connect;
-import org.vaadin.sliderpanel.SliderPanel;
 
 /**
  * connects SliderPanel with GWT VSliderPanel
@@ -24,7 +25,9 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
     public SliderPanelConnector() {
         super();
 
-        getWidget().setToggleListener(expanded -> SliderPanelConnector.this.rpc.clicked(expanded));
+        getWidget().setToggleListener(expanded -> {
+            SliderPanelConnector.this.rpc.clicked(expanded);
+        });
 
         registerRpc(SliderPanelClientRpc.class, new SliderPanelClientRpc() {
 
@@ -66,6 +69,9 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 
         getWidget().configure(getState().mode, getState().flowInContent, getState().tabPosition, getState().pixel);
 
+        if (stateChangeEvent.hasPropertyChanged("enabled")) {
+            getWidget().setSliderPanelEnabled(getState().enabled);
+        }
         if (stateChangeEvent.hasPropertyChanged("animationDuration")) {
             getWidget().setAnimationDuration(getState().animationDuration);
         }
@@ -84,7 +90,7 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 
         if (ComponentStateUtil.hasStyles(getState())) {
             String extraStyles = "";
-            for (String style : getState().styles) {
+            for (final String style : getState().styles) {
                 extraStyles += " " + style;
             }
             getWidget().setStyles(extraStyles);
