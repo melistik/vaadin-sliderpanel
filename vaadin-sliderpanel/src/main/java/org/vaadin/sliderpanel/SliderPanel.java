@@ -68,6 +68,12 @@ public class SliderPanel extends AbstractSingleComponentContainer {
                 addStyleName(style);
             }
         }
+
+        // When the width of the content is set in percentages some components do not load correctly, because of wrong calculations
+        if (builder.content.getWidthUnits()
+                .equals(Unit.PERCENTAGE) && builder.pixel != -1) {
+            builder.content.setWidth(builder.content.getWidth() * 0.01f * ((float) builder.pixel), Unit.PIXELS);
+        }
     }
 
     /**
