@@ -284,4 +284,9 @@
       color: #fff;
     }
   }
+
+  .v-disabled .v-sliderpanel-caption{
+    opacity: 0.5;
+    cursor: default;
+  }
 }
