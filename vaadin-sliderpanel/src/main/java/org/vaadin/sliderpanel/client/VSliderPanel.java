@@ -55,6 +55,8 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
 
     private boolean autoCollapseSlider = false;
 
+    private boolean sliderPanelEnabled = true;
+
     public VSliderPanel() {
         super();
         // main wrapper of the component
@@ -86,7 +88,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
         this.captionNode.setClassName(VSliderPanel.CLASSNAME + "-caption");
         this.tabElem.appendChild(this.captionNode);
 
-        DivElement toggleLabel = Document.get()
+        final DivElement toggleLabel = Document.get()
                                          .createDivElement();
         toggleLabel.setClassName(VSliderPanel.CLASSNAME + "-icon");
         this.tabElem.appendChild(toggleLabel);
@@ -159,6 +161,9 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
     }
 
     public void setExpand(final boolean expand, final boolean animated) {
+        if (!isSliderPanelEnabled()) {
+            return;
+        }
         animateTo(expand, animated ? this.animationDuration : 0, true);
     }
 
@@ -166,11 +171,11 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
         this.animationDuration = animationDuration;
     }
 
-    public void setAutoCollapseSlider(boolean autoCollapseSlider) {
+    public void setAutoCollapseSlider(final boolean autoCollapseSlider) {
         this.autoCollapseSlider = autoCollapseSlider;
     }
     
-    public void setZIndex(int zIndex) {
+    public void setZIndex(final int zIndex) {
     	this.contentNode.getStyle().setZIndex(zIndex);
     	this.navigationElem.getStyle().setZIndex(zIndex+1);
     	this.wrapperNode.getStyle().setZIndex(zIndex);
@@ -192,6 +197,9 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
 
     @Override
     public void onBrowserEvent(final Event event) {
+        if (!isSliderPanelEnabled()) {
+            return;
+        }
         if (event != null && (event.getTypeInt() == Event.ONCLICK)) {
             animateTo(!this.expand, this.animationDuration, true);
         }
@@ -317,7 +325,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
                     }
                 }
             }
-        };
+        }
 
         @Override
         protected void onComplete() {
@@ -334,7 +342,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
             if (VSliderPanel.this.listener != null && this.fireToggleEvent) {
                 VSliderPanel.this.listener.onToggle(VSliderPanel.this.expand);
             }
-        };
+        }
 
         private int extractProportionalLength(final double progress) {
             if (this.animateToExpand) {
@@ -354,9 +362,9 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
      * @param fireToggleEvent should an event get fired afterwards
      */
     public void animateTo(final boolean expand, final int duration, final boolean fireToggleEvent) {
-
-        if (this.slideAnimation.isRunning())
+        if (this.slideAnimation.isRunning()) {
             return;
+        }
 
         this.slideAnimation.setAnimateToExpand(expand, fireToggleEvent);
         this.slideAnimation.run(duration);
@@ -413,8 +421,8 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
      * @param event NativeEvent
      * @return true when events comes from within
      */
-    private boolean eventTargetsPopup(NativeEvent event) {
-        EventTarget target = event.getEventTarget();
+    private boolean eventTargetsPopup(final NativeEvent event) {
+        final EventTarget target = event.getEventTarget();
         if (Element.is(target)) {
             return getElement().isOrHasChild(Element.as(target));
         }
@@ -428,24 +436,24 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
      * @param event NativeEvent
      * @return true when events comes from within
      */
-    private boolean eventTargetsInnerElementsPopover(NativeEvent event) {
-        EventTarget target = event.getEventTarget();
+    private boolean eventTargetsInnerElementsPopover(final NativeEvent event) {
+        final EventTarget target = event.getEventTarget();
         if (Element.is(target)) {
-            Element targetElement = Element.as(target);
+            final Element targetElement = Element.as(target);
 
-            int absoluteLeft = targetElement.getAbsoluteLeft();
-            int absoluteTop = targetElement.getAbsoluteTop();
+            final int absoluteLeft = targetElement.getAbsoluteLeft();
+            final int absoluteTop = targetElement.getAbsoluteTop();
             
-            return contentNode.getAbsoluteLeft() <= absoluteLeft && contentNode.getAbsoluteRight() >= absoluteLeft && contentNode.getAbsoluteTop() <= absoluteTop
-                    && contentNode.getAbsoluteBottom() >= absoluteTop;
+            return this.contentNode.getAbsoluteLeft() <= absoluteLeft && this.contentNode.getAbsoluteRight() >= absoluteLeft
+                    && this.contentNode.getAbsoluteTop() <= absoluteTop && this.contentNode.getAbsoluteBottom() >= absoluteTop;
         }
         return false;
     }
 
     @Override
-    public void onPreviewNativeEvent(NativePreviewEvent event) {
-        if (autoCollapseSlider && event != null && !event.isCanceled() && expand) {
-            Event nativeEvent = Event.as(event.getNativeEvent());
+    public void onPreviewNativeEvent(final NativePreviewEvent event) {
+        if (this.autoCollapseSlider && event != null && !event.isCanceled() && this.expand) {
+            final Event nativeEvent = Event.as(event.getNativeEvent());
 
             switch (nativeEvent.getTypeInt()) {
                 case Event.ONMOUSEDOWN:
@@ -463,4 +471,16 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
         }
     }
 
+    public boolean isSliderPanelEnabled() {
+        return this.sliderPanelEnabled;
+    }
+
+    public void setSliderPanelEnabled(final boolean sliderPanelEnabled) {
+        this.sliderPanelEnabled = sliderPanelEnabled;
+        if (!sliderPanelEnabled) {
+            this.captionNode.setAttribute("disabled", "on");
+            return;
+        }
+        this.captionNode.removeAttribute("disabled");
+    }
 }

@@ -77,6 +77,9 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 
         getWidget().configure(getState().mode, getState().flowInContent, getState().tabPosition, getState().pixel);
 
+        if (stateChangeEvent.hasPropertyChanged("enabled")) {
+            getWidget().setSliderPanelEnabled(getState().enabled);
+        }
         if (stateChangeEvent.hasPropertyChanged("animationDuration")) {
             getWidget().setAnimationDuration(getState().animationDuration);
         }
@@ -95,7 +98,7 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
 
         if (ComponentStateUtil.hasStyles(getState())) {
             String extraStyles = "";
-            for (String style : getState().styles) {
+            for (final String style : getState().styles) {
                 extraStyles += " " + style;
             }
             getWidget().setStyles(extraStyles);
