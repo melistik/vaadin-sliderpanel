@@ -5,7 +5,7 @@
 	<groupId>org.vaadin.addons</groupId>
 	<artifactId>vaadin-sliderpanel-root</artifactId>
 	<packaging>pom</packaging>
-	<version>1.4.3-SNAPSHOT</version>
+    <version>1.4.4-SNAPSHOT</version>
 
 	<modules>
 		<module>vaadin-sliderpanel</module>

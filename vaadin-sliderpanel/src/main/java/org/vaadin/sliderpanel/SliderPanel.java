@@ -33,7 +33,7 @@ public class SliderPanel extends AbstractSingleComponentContainer {
 		public void clicked(final boolean visible) {
 			getState().expand = visible;
 			// fires event on all listeners
-			for (SliderPanelListener listener : SliderPanel.this.listeners) {
+            for (final SliderPanelListener listener : SliderPanel.this.listeners) {
 				listener.onToggle(visible);
 			}
 		}
@@ -132,10 +132,15 @@ public class SliderPanel extends AbstractSingleComponentContainer {
 			this.listeners.addAll(builder.listeners);
 		}
 		if (builder.styles != null) {
-			for (String style : builder.styles) {
+            for (final String style : builder.styles) {
 				addStyleName(style);
 			}
 		}
+        // When the width of the content is set in percentages some components do not load correctly, because of wrong calculations
+        if (builder.content.getWidthUnits()
+            .equals(Unit.PERCENTAGE) && builder.pixel != -1) {
+            builder.content.setWidth(builder.content.getWidth() * 0.01f * ((float) builder.pixel), Unit.PIXELS);
+        }
 	}
 
 	/**
@@ -222,7 +227,7 @@ public class SliderPanel extends AbstractSingleComponentContainer {
      * 
      * @param autoCollapseSlider enable auto collapse in expand state
      */
-	public void setAutoCollapseSlider(boolean autoCollapseSlider) {
+    public void setAutoCollapseSlider(final boolean autoCollapseSlider) {
 		getState().autoCollapseSlider = autoCollapseSlider;
 	}
 	
@@ -232,7 +237,7 @@ public class SliderPanel extends AbstractSingleComponentContainer {
      * @param zIndex
      *            default <b>9990</b>
      */
-	public void setZIndex(int zIndex) {
+    public void setZIndex(final int zIndex) {
 		getState().zIndex = zIndex;
 	}
 
