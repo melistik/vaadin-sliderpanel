@@ -22,4 +22,6 @@ public class SliderPanelState extends AbstractSingleComponentContainerState {
     public int pixel = -1;
     public boolean autoCollapseSlider = false;
     public int zIndex = 9990;
+    public boolean enableToggle = true;
+
 }

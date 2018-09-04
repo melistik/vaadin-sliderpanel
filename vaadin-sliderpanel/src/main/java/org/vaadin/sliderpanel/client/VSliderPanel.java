@@ -478,9 +478,11 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (!enabled) {
+            wrapperNode.addClassName("v-disabled");
             tabElem.setAttribute("disabled", "on");
             return;
         }
+        wrapperNode.removeClassName("v-disabled");
         tabElem.removeAttribute("disabled");
     }
 

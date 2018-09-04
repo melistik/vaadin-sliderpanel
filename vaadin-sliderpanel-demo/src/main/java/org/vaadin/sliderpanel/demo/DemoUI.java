@@ -110,6 +110,7 @@ public class DemoUI extends UI {
                         .zIndex(9980)
                         .build();
         contentLayout.addComponent(leftSlider);
+        paddingLeftComp.addComponent(new Button("toggle Slider", e -> leftSlider.setEnabledToggle(!leftSlider.isEnabledToggle())));
         paddingLeftComp.addComponent(new Button("toggle Enabled", e -> leftSlider.setEnabled(!leftSlider.isEnabled())));
 
         // dummy middle content

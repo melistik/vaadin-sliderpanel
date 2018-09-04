@@ -263,4 +263,18 @@ public class SliderPanel extends AbstractSingleComponentContainer {
             return expand;
         }
     }
+
+    /**
+     * allow to disable changing toggle<br>
+     *     content is not disabled
+     *
+     * @param enabled by default enabled
+     */
+    public void setEnabledToggle(boolean enabled) {
+        getState().enableToggle = enabled;
+    }
+
+    public boolean isEnabledToggle() {
+        return getState().enableToggle;
+    }
 }
