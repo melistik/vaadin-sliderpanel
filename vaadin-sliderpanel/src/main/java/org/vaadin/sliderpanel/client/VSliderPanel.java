@@ -55,6 +55,8 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
 
     private boolean autoCollapseSlider = false;
 
+    private boolean enabled = true;
+
     public VSliderPanel() {
         super();
         // main wrapper of the component
@@ -159,6 +161,9 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
     }
 
     public void setExpand(final boolean expand, final boolean animated) {
+        if (!isEnabled()) {
+            return;
+        }
         animateTo(expand, animated ? this.animationDuration : 0, true);
     }
 
@@ -192,6 +197,9 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
 
     @Override
     public void onBrowserEvent(final Event event) {
+        if (!isEnabled()) {
+            return;
+        }
         if (event != null && (event.getTypeInt() == Event.ONCLICK)) {
             animateTo(!this.expand, this.animationDuration, true);
         }
@@ -463,4 +471,19 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
         }
     }
 
+
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (!enabled) {
+            wrapperNode.addClassName("v-disabled");
+            tabElem.setAttribute("disabled", "on");
+            return;
+        }
+        wrapperNode.removeClassName("v-disabled");
+        tabElem.removeAttribute("disabled");
+    }
 }

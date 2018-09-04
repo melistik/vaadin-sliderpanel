@@ -92,6 +92,10 @@ public class SliderPanelConnector extends AbstractSingleComponentContainerConnec
         if (stateChangeEvent.hasPropertyChanged("zIndex")) {
             getWidget().setZIndex(getState().zIndex);
         }
+        if (stateChangeEvent.hasPropertyChanged("enabled") ||
+                stateChangeEvent.hasPropertyChanged("enableToggle")) {
+            getWidget().setEnabled(getState().enabled && getState().enableToggle);
+        }
 
         if (ComponentStateUtil.hasStyles(getState())) {
             String extraStyles = "";
