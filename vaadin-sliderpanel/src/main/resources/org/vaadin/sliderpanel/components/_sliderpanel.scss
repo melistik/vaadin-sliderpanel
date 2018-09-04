@@ -216,6 +216,16 @@
     text-align: center;
   }
 
+  /* --------- disabled --------- */
+  .v-disabled {
+    .v-sliderpanel-icon, .v-sliderpanel-caption, .v-sliderpanel-tab {
+      cursor: default;
+    }
+    .v-sliderpanel-caption {
+      opacity: 0.5;
+    }
+  }
+
   /* --------- different colors --------- */
 
 

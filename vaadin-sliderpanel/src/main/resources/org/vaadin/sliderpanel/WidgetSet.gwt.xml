@@ -23,6 +23,6 @@
     -->
     <!-- <set-configuration-property name="devModeRedirectEnabled" value="true" />  -->
     
-    <stylesheet src="sliderpanel/sliderpanel.css?v=1.4.2"/>
+    <stylesheet src="sliderpanel/sliderpanel.css?v=2.1.0"/>
 
 </module>

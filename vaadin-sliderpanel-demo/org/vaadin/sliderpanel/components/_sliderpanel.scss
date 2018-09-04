@@ -152,6 +152,9 @@
     h1, .v-label-h1, h2, .v-label-h2, h3, .v-label-h3 {
       color: #fff;
     }
+    .v-grid, .v-table {
+      color: black;
+    }
   }
 
   /* --------- navigator --------- */
@@ -189,7 +192,7 @@
       padding: 3px 0 0 15px;
       width: $tab-caption-size-v * 1px;
       overflow: hidden;
-      word-wrap: break-all;
+      word-break: break-all;
       height: $tab-short-size-v - 6px;
     }
   }
@@ -211,6 +214,16 @@
     line-height: 22px;
     font-size: 16px;
     text-align: center;
+  }
+
+  /* --------- disabled --------- */
+  .v-disabled {
+    .v-sliderpanel-icon, .v-sliderpanel-caption, .v-sliderpanel-tab {
+      cursor: default;
+    }
+    .v-sliderpanel-caption {
+      opacity: 0.5;
+    }
   }
 
   /* --------- different colors --------- */

@@ -97,6 +97,7 @@ public class DemoUI extends UI {
         leftPaddingContent.setSizeFull();
         paddingLeftComp.addComponentsAndExpand(leftPaddingContent);
 
+
         contentLayout.addComponent(paddingLeftComp);
 
         // left slider
@@ -109,6 +110,7 @@ public class DemoUI extends UI {
                         .zIndex(9980)
                         .build();
         contentLayout.addComponent(leftSlider);
+        paddingLeftComp.addComponent(new Button("toggle Enabled", e -> leftSlider.setEnabled(!leftSlider.isEnabled())));
 
         // dummy middle content
         VerticalLayout contentLabel = dummyContent("Main Content", 4);
@@ -136,7 +138,6 @@ public class DemoUI extends UI {
         // right slider
         VerticalLayout rightDummyContent = dummyContent("Right Slider Heading", 1);
         rightDummyContent.setWidth(400, Unit.PIXELS);
-
 
         ComboBox simpleCombo = new ComboBox("Combo");
         simpleCombo.setItems(SliderMode.values());
