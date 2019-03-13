@@ -1,3 +1,7 @@
+[![Vaadin Directory status](http://img.shields.io/vaadin-directory/status/sliderpanel.svg)](https://vaadin.com/directory/component/croppie)
+[![Vaadin Directory version](http://img.shields.io/vaadin-directory/version/sliderpanel.svg)](https://vaadin.com/directory/component/croppie)
+[![Vaadin Directory star](http://img.shields.io/vaadin-directory/star/sliderpanel.svg)](https://vaadin.com/directory/component/croppie)
+
 Vaadin SliderPanel
 ==============
 
