@@ -65,7 +65,7 @@ public class DemoUI extends UI {
                         .style(SliderPanelStyles.COLOR_GREEN)
                         .flowInContent(true)
                         .fixedContentSize(Page.getCurrent()
-                                .getBrowserWindowHeight() - 100)
+                                .getBrowserWindowHeight() - 130)
                         .build();
 
         // Two top slider
