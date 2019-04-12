@@ -174,7 +174,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
     public void setAutoCollapseSlider(boolean autoCollapseSlider) {
         this.autoCollapseSlider = autoCollapseSlider;
     }
-    
+
     public void setZIndex(int zIndex) {
     	this.contentNode.getStyle().setZIndex(zIndex);
     	this.navigationElem.getStyle().setZIndex(zIndex+1);
@@ -208,7 +208,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
 
     /**
      * used to log in javascript console
-     * 
+     *
      * @param message info to get logged
      */
     native void consoleLog(final String message) /*-{
@@ -262,7 +262,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
                     VSliderPanel.this.contentNode.getFirstChildElement().getStyle().setPosition(Position.ABSOLUTE);
                     VSliderPanel.this.contentNode.getFirstChildElement().getStyle().setLeft(-1 * (VSliderPanel.this.componentSize - size), Style.Unit.PX);
 
-                    
+
                     if (VSliderPanel.this.flowInContent) {
                         VSliderPanel.this.navigationElem.getStyle()
                                                         .setRight(-1 * (size + VSliderPanel.this.tabSize), Style.Unit.PX);
@@ -292,8 +292,14 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
                     }
                 }
                 else {
+                    VSliderPanel.this.contentNode.getFirstChildElement()
+                            .getStyle()
+                            .setPosition(Position.ABSOLUTE);
+                    VSliderPanel.this.contentNode.getFirstChildElement()
+                            .getStyle()
+                            .setTop(-1 * (VSliderPanel.this.componentSize - size), Style.Unit.PX);
                     VSliderPanel.this.navigationElem.getStyle()
-                                                    .setTop(size, Style.Unit.PX);
+                            .setTop(size, Style.Unit.PX);
                 }
             }
         }
@@ -356,7 +362,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
 
     /**
      * run animation with params
-     * 
+     *
      * @param expand final state
      * @param duration milliseconds how long the animation takes
      * @param fireToggleEvent should an event get fired afterwards
@@ -388,7 +394,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
 
     /**
      * schedule animation with delay
-     * 
+     *
      * @param expand final state
      * @param animated should get animated
      * @param delayMillis milliseconds of delayed execution
@@ -403,7 +409,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
 
     /**
      * adds custom styleNames to wrapper
-     * 
+     *
      * @param styles add styleName to all nodes
      */
     public void setStyles(final String styles) {
@@ -417,7 +423,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
 
     /**
      * checks whether the event comes from an element within the slider dom tree
-     * 
+     *
      * @param event NativeEvent
      * @return true when events comes from within
      */
@@ -432,7 +438,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
     /**
      * checks whether the event come's from a elements that lays visually within the slider<br>
      * it doesn't lay directly in the dom tree - for example dropdown popups
-     * 
+     *
      * @param event NativeEvent
      * @return true when events comes from within
      */
@@ -443,7 +449,7 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
 
             int absoluteLeft = targetElement.getAbsoluteLeft();
             int absoluteTop = targetElement.getAbsoluteTop();
-            
+
             return contentNode.getAbsoluteLeft() <= absoluteLeft && contentNode.getAbsoluteRight() >= absoluteLeft && contentNode.getAbsoluteTop() <= absoluteTop
                     && contentNode.getAbsoluteBottom() >= absoluteTop;
         }

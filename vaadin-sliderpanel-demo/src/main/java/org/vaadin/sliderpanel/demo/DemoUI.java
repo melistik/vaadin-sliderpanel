@@ -53,6 +53,7 @@ public class DemoUI extends UI {
         // top slider
         Grid grid = genGrid();
         VerticalLayout topLeftSliderContent = new VerticalLayout(new Label("Grid works now!"), grid);
+        topLeftSliderContent.addComponent(new DateField());
         topLeftSliderContent.setMargin(true);
         topLeftSliderContent.setSpacing(true);
         topLeftSliderContent.setExpandRatio(grid, 1);
