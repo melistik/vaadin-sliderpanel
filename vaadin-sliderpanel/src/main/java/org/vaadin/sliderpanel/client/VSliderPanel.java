@@ -292,8 +292,14 @@ public class VSliderPanel extends SimplePanel implements NativePreviewHandler {
                     }
                 }
                 else {
+                    VSliderPanel.this.contentNode.getFirstChildElement()
+                            .getStyle()
+                            .setPosition(Position.ABSOLUTE);
+                    VSliderPanel.this.contentNode.getFirstChildElement()
+                            .getStyle()
+                            .setTop(-1 * (VSliderPanel.this.componentSize - size), Style.Unit.PX);
                     VSliderPanel.this.navigationElem.getStyle()
-                                                    .setTop(size, Style.Unit.PX);
+                            .setTop(size, Style.Unit.PX);
                 }
             }
         }
